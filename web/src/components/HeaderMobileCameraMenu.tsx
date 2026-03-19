@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 const SOUND_PATH = "/sounds/shutter.mp3";
 const FLASH_MS = 320;
@@ -71,19 +77,33 @@ const NAV_ITEMS = [
   { href: "/kadrajin-otesi", label: "Kadrajın Ötesi" },
 ] as const;
 
+function measurePanelPosition(
+  buttonEl: HTMLButtonElement | null
+): { top: number; right: number } | null {
+  if (!buttonEl || typeof window === "undefined") return null;
+  const r = buttonEl.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  return {
+    top: r.bottom + 8,
+    right: Math.max(12, vw - r.right),
+  };
+}
+
 /**
- * Mobil: kamera → flaş + menü. Menü `document.body` portallanır; böylece HeaderSnow
- * `overflow-hidden` ve alttaki `<section>` kardeşi menünün üstüne binmez.
- *
- * Panel ekranın altında (bottom sheet): butonun altına `fixed` konumlandırma bazı
- * mobil tarayıcılarda `panelPos` gecikmesi / görünürlük sorunlarına yol açıyordu.
+ * Mobil: kamera → flaş + küçük açılır menü, header’daki butonun hemen altında (sağa hizalı).
+ * Portal `document.body` — HeaderSnow overflow sorunu olmaz.
  */
 export function HeaderMobileCameraMenu() {
   const [open, setOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [panelPos, setPanelPos] = useState<{
+    top: number;
+    right: number;
+  } | null>(null);
   const busy = useRef(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const clearTimers = useCallback(() => {
     timers.current.forEach(clearTimeout);
@@ -98,14 +118,24 @@ export function HeaderMobileCameraMenu() {
     return () => clearTimers();
   }, [clearTimers]);
 
-  useEffect(() => {
-    if (!open || typeof document === "undefined") return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+  const reposition = useCallback(() => {
+    const pos = measurePanelPosition(buttonRef.current);
+    if (pos) setPanelPos(pos);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) {
+      setPanelPos(null);
+      return;
+    }
+    reposition();
+    window.addEventListener("resize", reposition);
+    window.addEventListener("scroll", reposition, true);
     return () => {
-      document.body.style.overflow = prev;
+      window.removeEventListener("resize", reposition);
+      window.removeEventListener("scroll", reposition, true);
     };
-  }, [open]);
+  }, [open, reposition]);
 
   useEffect(() => {
     if (!open) return;
@@ -135,43 +165,51 @@ export function HeaderMobileCameraMenu() {
       schedule(() => setFlash(false), FLASH_MS);
     }
     schedule(() => {
+      const pos =
+        measurePanelPosition(buttonRef.current) ?? {
+          top: 80,
+          right: 16,
+        };
+      /* Aynı tick’te konum + open: ilk karede panel görünsün */
+      setPanelPos(pos);
       setOpen(true);
       busy.current = false;
     }, reduced ? 0 : 140);
   };
 
   const portal =
-    mounted && open && typeof document !== "undefined"
+    mounted &&
+    open &&
+    panelPos &&
+    typeof document !== "undefined"
       ? createPortal(
           <>
             <button
               type="button"
               aria-label="Menüyü kapat"
-              className="fixed inset-0 bg-black/50 md:hidden"
+              className="fixed inset-0 bg-black/35 md:hidden"
               style={{ zIndex: Z_BACKDROP }}
               onClick={() => setOpen(false)}
             />
             <nav
-              className="fixed inset-x-0 bottom-0 max-h-[min(70vh,420px)] overflow-y-auto rounded-t-2xl border border-white/[0.12] border-b-0 bg-[#121a22]/98 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_40px_rgba(0,0,0,0.45)] backdrop-blur-md md:hidden"
+              className="fixed w-[min(220px,calc(100vw-1.5rem))] rounded-xl border border-white/[0.12] bg-[#121a22]/98 py-1 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-md md:hidden"
               style={{
                 zIndex: Z_PANEL,
-                paddingLeft: "max(1rem, env(safe-area-inset-left))",
-                paddingRight: "max(1rem, env(safe-area-inset-right))",
+                top: panelPos.top,
+                right: panelPos.right,
+                maxHeight: "min(70vh, 320px)",
+                overflowY: "auto",
               }}
               role="menu"
               aria-label="Gezinme"
             >
-              <div
-                className="mx-auto mb-3 h-1 w-10 shrink-0 rounded-full bg-white/20"
-                aria-hidden
-              />
               {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   role="menuitem"
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg px-4 py-3.5 text-left text-base tracking-wide text-[#d4dce8] active:bg-white/[0.08]"
+                  className="block px-3.5 py-2 text-left text-sm tracking-wide text-[#d4dce8] active:bg-white/[0.06]"
                 >
                   {item.label}
                 </Link>
@@ -194,14 +232,15 @@ export function HeaderMobileCameraMenu() {
 
       {portal}
 
-      <div className="relative md:hidden">
+      <div className="relative z-[40] md:hidden">
         <button
+          ref={buttonRef}
           type="button"
           onClick={toggleMenu}
           aria-expanded={open}
           aria-haspopup="true"
           aria-label={open ? "Menüyü kapat — deklanşör" : "Menüyü aç — deklanşör"}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.12] bg-[#0c1218]/40 text-[#c8dff2] backdrop-blur-sm active:scale-[0.97]"
+          className="flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-xl border border-white/[0.12] bg-[#0c1218]/40 text-[#c8dff2] backdrop-blur-sm active:scale-[0.97]"
         >
           <CameraIcon className="h-6 w-6" aria-hidden />
         </button>
