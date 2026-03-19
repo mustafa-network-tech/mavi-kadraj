@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const SOUND_PATH = "/sounds/shutter.mp3";
 const FLASH_MS = 320;
@@ -80,18 +74,16 @@ const NAV_ITEMS = [
 /**
  * Mobil: kamera → flaş + menü. Menü `document.body` portallanır; böylece HeaderSnow
  * `overflow-hidden` ve alttaki `<section>` kardeşi menünün üstüne binmez.
+ *
+ * Panel ekranın altında (bottom sheet): butonun altına `fixed` konumlandırma bazı
+ * mobil tarayıcılarda `panelPos` gecikmesi / görünürlük sorunlarına yol açıyordu.
  */
 export function HeaderMobileCameraMenu() {
   const [open, setOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [panelPos, setPanelPos] = useState<{
-    top: number;
-    right: number;
-  } | null>(null);
   const busy = useRef(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const clearTimers = useCallback(() => {
     timers.current.forEach(clearTimeout);
@@ -106,34 +98,14 @@ export function HeaderMobileCameraMenu() {
     return () => clearTimers();
   }, [clearTimers]);
 
-  const updatePanelPosition = useCallback(() => {
-    const el = buttonRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const vw =
-      typeof window !== "undefined"
-        ? window.document.documentElement.clientWidth
-        : 0;
-    setPanelPos({
-      top: r.bottom + 8,
-      right: Math.max(12, vw - r.right),
-    });
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!open) {
-      setPanelPos(null);
-      return;
-    }
-    updatePanelPosition();
-    const onReposition = () => updatePanelPosition();
-    window.addEventListener("resize", onReposition);
-    window.addEventListener("scroll", onReposition, true);
+  useEffect(() => {
+    if (!open || typeof document === "undefined") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      window.removeEventListener("resize", onReposition);
-      window.removeEventListener("scroll", onReposition, true);
+      document.body.style.overflow = prev;
     };
-  }, [open, updatePanelPosition]);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -169,36 +141,37 @@ export function HeaderMobileCameraMenu() {
   };
 
   const portal =
-    mounted &&
-    open &&
-    panelPos &&
-    typeof document !== "undefined"
+    mounted && open && typeof document !== "undefined"
       ? createPortal(
           <>
             <button
               type="button"
               aria-label="Menüyü kapat"
-              className="fixed inset-0 bg-black/40 md:hidden"
+              className="fixed inset-0 bg-black/50 md:hidden"
               style={{ zIndex: Z_BACKDROP }}
               onClick={() => setOpen(false)}
             />
             <nav
-              className="fixed w-[min(240px,calc(100vw-1.5rem))] rounded-xl border border-white/[0.12] bg-[#121a22]/98 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.55)] backdrop-blur-md md:hidden"
+              className="fixed inset-x-0 bottom-0 max-h-[min(70vh,420px)] overflow-y-auto rounded-t-2xl border border-white/[0.12] border-b-0 bg-[#121a22]/98 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_40px_rgba(0,0,0,0.45)] backdrop-blur-md md:hidden"
               style={{
                 zIndex: Z_PANEL,
-                top: panelPos.top,
-                right: panelPos.right,
+                paddingLeft: "max(1rem, env(safe-area-inset-left))",
+                paddingRight: "max(1rem, env(safe-area-inset-right))",
               }}
               role="menu"
               aria-label="Gezinme"
             >
+              <div
+                className="mx-auto mb-3 h-1 w-10 shrink-0 rounded-full bg-white/20"
+                aria-hidden
+              />
               {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   role="menuitem"
                   onClick={() => setOpen(false)}
-                  className="block px-4 py-2.5 text-left text-sm tracking-wide text-[#d4dce8] active:bg-white/[0.06]"
+                  className="block rounded-lg px-4 py-3.5 text-left text-base tracking-wide text-[#d4dce8] active:bg-white/[0.08]"
                 >
                   {item.label}
                 </Link>
@@ -223,7 +196,6 @@ export function HeaderMobileCameraMenu() {
 
       <div className="relative md:hidden">
         <button
-          ref={buttonRef}
           type="button"
           onClick={toggleMenu}
           aria-expanded={open}
