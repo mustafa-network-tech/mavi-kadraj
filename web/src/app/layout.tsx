@@ -1,0 +1,74 @@
+import type { Metadata } from "next";
+import { Cormorant_Garamond, Outfit, Playfair_Display, Inter } from "next/font/google";
+import "./globals.css";
+import { site } from "@/lib/site";
+
+/** Genel site OG — public/og/mavi-kadraj-og.jpg */
+const DEFAULT_OG = {
+  url: "/og/mavi-kadraj-og.jpg",
+  width: 1200,
+  height: 630,
+  alt: "Mavi Kadraj",
+} as const;
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+});
+
+const outfit = Outfit({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500"],
+  variable: "--font-outfit",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin", "latin-ext"],
+  weight: ["500"],
+  variable: "--font-playfair",
+});
+
+const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400"],
+  variable: "--font-inter",
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: `${site.name} — sessiz kareler`,
+    template: `%s — ${site.name}`,
+  },
+  description: site.description,
+  metadataBase: new URL(site.url),
+  openGraph: {
+    title: site.name,
+    description: site.description,
+    locale: "tr_TR",
+    type: "website",
+    images: [DEFAULT_OG],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.name,
+    description: site.description,
+    images: [DEFAULT_OG.url],
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="tr" className={`${cormorant.variable} ${outfit.variable} ${playfair.variable} ${inter.variable}`}>
+      <body className="relative min-h-screen antialiased">
+        <div className="mk-grain" aria-hidden />
+        <div className="relative z-10 flex min-h-screen flex-col">{children}</div>
+      </body>
+    </html>
+  );
+}
