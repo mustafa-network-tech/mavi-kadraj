@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const SLIDE_MS = 7000;
+const SLIDE_MS = 8000;
 
 /** Her sahne: görsel + iç ses + doğal hizalama (merkez değil) */
 const SCENES = [
@@ -40,7 +40,7 @@ const SCENES = [
 ] as const;
 
 /**
- * Slider değil: 7 sn’lik sahne döngüsü — görsel + tek slogan, senkron.
+ * Slider değil: 8 sn’lik sahne döngüsü — görsel + tek slogan, senkron.
  */
 export function HeroStoryFlow() {
   const [index, setIndex] = useState(0);
