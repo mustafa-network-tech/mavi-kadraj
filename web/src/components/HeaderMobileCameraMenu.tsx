@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-const Z_LAYER = 50000;
+const Z_BACKDROP = 50000;
+const Z_PANEL = 50100;
 
 const NAV_ITEMS = [
   { href: "/", label: "Ana sayfa" },
@@ -13,25 +14,53 @@ const NAV_ITEMS = [
   { href: "/kadrajin-otesi", label: "Kadrajın Ötesi" },
 ] as const;
 
+function measureUnderButton(
+  buttonEl: HTMLButtonElement | null
+): { top: number; right: number } | null {
+  if (!buttonEl || typeof window === "undefined") return null;
+  const r = buttonEl.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  return {
+    top: r.bottom + 8,
+    right: Math.max(12, vw - r.right),
+  };
+}
+
 /**
- * Mobil: kamera ikonu = normal tam ekran menü. Flaş/ses yok.
- * Tek `onClick` — touchEnd ile yatay kayma / çift tetiklenme riski yok.
+ * Mobil: kamera ikonu — header altında küçük menü paneli (tam ekran değil).
+ * Portal body’de; flaş/ses yok, tek tıkla aç/kapa.
  */
 export function HeaderMobileCameraMenu() {
   const [open, setOpen] = useState(false);
+  const [panelPos, setPanelPos] = useState<{ top: number; right: number } | null>(
+    null
+  );
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const close = useCallback(() => setOpen(false), []);
-  const toggle = useCallback(() => setOpen((o) => !o), []);
+
+  const reposition = useCallback(() => {
+    const p = measureUnderButton(buttonRef.current);
+    if (p) setPanelPos(p);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    reposition();
+    window.addEventListener("resize", reposition);
+    window.addEventListener("scroll", reposition, true);
+    return () => {
+      window.removeEventListener("resize", reposition);
+      window.removeEventListener("scroll", reposition, true);
+    };
+  }, [open, reposition]);
 
   useEffect(() => {
     if (!open || typeof document === "undefined") return;
     const prevBody = document.body.style.overflow;
-    const prevHtml = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prevBody;
-      document.documentElement.style.overflow = prevHtml;
     };
   }, [open]);
 
@@ -44,55 +73,61 @@ export function HeaderMobileCameraMenu() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const toggle = useCallback(() => {
+    if (open) {
+      setOpen(false);
+      return;
+    }
+    const pos =
+      measureUnderButton(buttonRef.current) ?? {
+        top: 80,
+        right: 16,
+      };
+    setPanelPos(pos);
+    setOpen(true);
+  }, [open]);
+
   const portal =
-    open && typeof document !== "undefined"
+    open &&
+    panelPos &&
+    typeof document !== "undefined"
       ? createPortal(
-          <div
-            id="mk-mobile-nav"
-            className="fixed inset-0 box-border flex w-full max-w-full flex-col bg-[#0c1218] md:hidden"
-            style={{
-              zIndex: Z_LAYER,
-              paddingTop: "env(safe-area-inset-top, 0px)",
-              paddingBottom: "env(safe-area-inset-bottom, 0px)",
-              overscrollBehavior: "contain",
-              touchAction: "auto",
-            }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site menüsü"
-          >
-            <div className="flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-3">
-              <span className="text-sm tracking-wide text-[var(--mk-muted)]">
-                Menü
-              </span>
-              <button
-                type="button"
-                onClick={close}
-                className="rounded-lg border border-white/[0.15] bg-white/[0.06] px-4 py-2 text-sm text-[#d4dce8] active:bg-white/[0.1]"
-              >
-                Kapat
-              </button>
-            </div>
+          <>
+            <button
+              type="button"
+              aria-label="Menüyü kapat"
+              className="fixed inset-0 bg-black/35 md:hidden"
+              style={{ zIndex: Z_BACKDROP }}
+              onClick={close}
+            />
             <nav
-              className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2 py-4"
+              id="mk-mobile-nav"
+              className="fixed box-border w-[min(228px,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] rounded-xl border border-white/[0.12] bg-[#121a22] py-1 shadow-[0_12px_40px_rgba(0,0,0,0.5)] md:hidden"
+              style={{
+                zIndex: Z_PANEL,
+                top: panelPos.top,
+                right: panelPos.right,
+                maxHeight: "min(65vh, 300px)",
+                overflowY: "auto",
+                WebkitOverflowScrolling: "touch",
+              }}
+              role="menu"
               aria-label="Gezinme"
-              style={{ WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <ul className="flex flex-col gap-0.5">
-                {NAV_ITEMS.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={close}
-                      className="block rounded-lg px-4 py-4 text-base tracking-wide text-[#e8eef4] active:bg-white/[0.08]"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  role="menuitem"
+                  onClick={close}
+                  className="block px-3.5 py-2.5 text-left text-sm tracking-wide text-[#d4dce8] active:bg-white/[0.08]"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
-          </div>,
+          </>,
           document.body
         )
       : null;
@@ -102,6 +137,7 @@ export function HeaderMobileCameraMenu() {
       {portal}
       <div className="relative z-[80] md:hidden">
         <button
+          ref={buttonRef}
           type="button"
           onClick={toggle}
           aria-expanded={open}
