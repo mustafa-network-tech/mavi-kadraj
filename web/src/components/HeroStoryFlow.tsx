@@ -23,7 +23,7 @@ const SCENES = [
     src: "/hero/hero2.jpg",
     slogan: "güneş batmaz… sadece gözden çekilir.",
     placeClass:
-      "left-[7%] bottom-[27%] sm:bottom-[31%] max-w-[min(84vw,14.5rem)] text-left",
+      "left-[7%] bottom-[12%] sm:bottom-[15%] max-w-[min(84vw,14.5rem)] text-left",
   },
   {
     src: "/hero/hero3.jpg",
