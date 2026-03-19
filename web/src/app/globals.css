@@ -127,27 +127,3 @@ body {
     animation: none;
   }
 }
-
-/* Ana sayfa mobil: deklanşör flaşı (hero kamera menü) */
-@keyframes mk-flash-explosion {
-  0% {
-    opacity: 0;
-  }
-  12% {
-    opacity: 0.94;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.mk-flash-explosion {
-  animation: mk-flash-explosion 0.32s ease-out forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mk-flash-explosion {
-    animation: none;
-    opacity: 0;
-  }
-}

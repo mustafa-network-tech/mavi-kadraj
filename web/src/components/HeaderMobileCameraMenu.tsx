@@ -4,66 +4,10 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-const SOUND_PATH = "/sounds/shutter.mp3";
-const FLASH_MS = 320;
 const Z_BACKDROP = 50000;
 const Z_PANEL = 50100;
-const Z_FLASH = 50080;
 /** Aynı dokunuşta hem touch hem sentetik click gelirse menü açılıp hemen kapanmasın */
 const GHOST_CLICK_MS = 450;
-
-function playHarshShutterSynth() {
-  const AC =
-    window.AudioContext ||
-    (window as unknown as { webkitAudioContext?: typeof AudioContext })
-      .webkitAudioContext;
-  if (!AC) return;
-  const ctx = new AC();
-  if (ctx.state === "suspended") void ctx.resume();
-  const t = ctx.currentTime;
-  const len = Math.floor(ctx.sampleRate * 0.085);
-  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-  const d = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) {
-    d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.1));
-  }
-  const noise = ctx.createBufferSource();
-  noise.buffer = buf;
-  const hp = ctx.createBiquadFilter();
-  hp.type = "highpass";
-  hp.frequency.value = 5200;
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.52, t);
-  g.gain.exponentialRampToValueAtTime(0.003, t + 0.09);
-  noise.connect(hp);
-  hp.connect(g);
-  g.connect(ctx.destination);
-  noise.start(t);
-  const o1 = ctx.createOscillator();
-  o1.type = "square";
-  o1.frequency.setValueAtTime(5200, t);
-  o1.frequency.exponentialRampToValueAtTime(280, t + 0.018);
-  const g1 = ctx.createGain();
-  g1.gain.setValueAtTime(0.16, t);
-  g1.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
-  o1.connect(g1);
-  g1.connect(ctx.destination);
-  o1.start(t);
-  o1.stop(t + 0.04);
-}
-
-function playShutterSound() {
-  const harsh = () => {
-    try {
-      playHarshShutterSynth();
-    } catch {
-      /* ignore */
-    }
-  };
-  const a = new Audio(SOUND_PATH);
-  a.volume = 1;
-  void a.play().catch(harsh);
-}
 
 const NAV_ITEMS = [
   { href: "/", label: "Ana sayfa" },
@@ -85,33 +29,24 @@ function measurePanelPosition(
 }
 
 /**
- * Mobil kamera menü. Portal body’de; header’da kar/hero ile çakışma olmasın.
- * iOS/Android: touch sonrası sentetik click çift toggle yapabiliyor — touchHandled ile engellenir.
+ * Mobil: kamera ikonuna tıklayınca menü açılır (flaş / ses yok).
+ * Portal body’de; iOS hayalet click koruması duruyor.
  */
 export function HeaderMobileCameraMenu() {
   const [open, setOpen] = useState(false);
-  const [flash, setFlash] = useState(false);
   const [panelPos, setPanelPos] = useState<{
     top: number;
     right: number;
   } | null>(null);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  /** Son touch ile menü tetiklendi; hemen ardından gelen click yok sayılır */
   const touchHandledRef = useRef(false);
   const ghostClickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const clearTimers = useCallback(() => {
-    timers.current.forEach(clearTimeout);
-    timers.current = [];
-  }, []);
-
   useEffect(() => {
     return () => {
-      clearTimers();
       if (ghostClickTimerRef.current) clearTimeout(ghostClickTimerRef.current);
     };
-  }, [clearTimers]);
+  }, []);
 
   const reposition = useCallback(() => {
     const pos = measurePanelPosition(buttonRef.current);
@@ -138,21 +73,10 @@ export function HeaderMobileCameraMenu() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const schedule = (fn: () => void, ms: number) => {
-    const id = setTimeout(fn, ms);
-    timers.current.push(id);
-  };
-
   const applyToggle = useCallback(() => {
     if (open) {
       setOpen(false);
       return;
-    }
-    playShutterSound();
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduced) {
-      setFlash(true);
-      schedule(() => setFlash(false), FLASH_MS);
     }
     const pos =
       measurePanelPosition(buttonRef.current) ?? {
@@ -226,14 +150,6 @@ export function HeaderMobileCameraMenu() {
 
   return (
     <>
-      {flash ? (
-        <div
-          className="mk-flash-explosion pointer-events-none fixed inset-0 bg-white"
-          style={{ zIndex: Z_FLASH }}
-          aria-hidden
-        />
-      ) : null}
-
       {portal}
 
       <div className="relative z-[80] md:hidden">
@@ -244,7 +160,7 @@ export function HeaderMobileCameraMenu() {
           onClick={onButtonClick}
           aria-expanded={open}
           aria-haspopup="true"
-          aria-label={open ? "Menüyü kapat — deklanşör" : "Menüyü aç — deklanşör"}
+          aria-label={open ? "Menüyü kapat" : "Menüyü aç — kamera"}
           className="flex h-11 w-11 shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center rounded-xl border border-white/[0.12] bg-[#0c1218]/40 text-[#c8dff2] backdrop-blur-sm active:scale-[0.97]"
         >
           <CameraIcon className="pointer-events-none h-6 w-6" aria-hidden />
