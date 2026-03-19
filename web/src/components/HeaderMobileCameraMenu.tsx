@@ -2,21 +2,15 @@
 
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const SOUND_PATH = "/sounds/shutter.mp3";
 const FLASH_MS = 320;
-/** Yüksek değerler: üretimde grain / lightbox / hero katmanlarının üstünde kalsın */
 const Z_BACKDROP = 50000;
 const Z_PANEL = 50100;
-/** Flaş, menüden düşük — bazı cihazlarda üst üste binme sorununu önler */
 const Z_FLASH = 50080;
+/** Aynı dokunuşta hem touch hem sentetik click gelirse menü açılıp hemen kapanmasın */
+const GHOST_CLICK_MS = 450;
 
 function playHarshShutterSynth() {
   const AC =
@@ -91,20 +85,21 @@ function measurePanelPosition(
 }
 
 /**
- * Mobil: kamera → flaş + küçük açılır menü, header’daki butonun hemen altında (sağa hizalı).
- * Portal `document.body` — HeaderSnow overflow sorunu olmaz.
+ * Mobil kamera menü. Portal body’de; header’da kar/hero ile çakışma olmasın.
+ * iOS/Android: touch sonrası sentetik click çift toggle yapabiliyor — touchHandled ile engellenir.
  */
 export function HeaderMobileCameraMenu() {
   const [open, setOpen] = useState(false);
   const [flash, setFlash] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [panelPos, setPanelPos] = useState<{
     top: number;
     right: number;
   } | null>(null);
-  const busy = useRef(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  /** Son touch ile menü tetiklendi; hemen ardından gelen click yok sayılır */
+  const touchHandledRef = useRef(false);
+  const ghostClickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearTimers = useCallback(() => {
     timers.current.forEach(clearTimeout);
@@ -112,11 +107,10 @@ export function HeaderMobileCameraMenu() {
   }, []);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    return () => clearTimers();
+    return () => {
+      clearTimers();
+      if (ghostClickTimerRef.current) clearTimeout(ghostClickTimerRef.current);
+    };
   }, [clearTimers]);
 
   const reposition = useCallback(() => {
@@ -125,10 +119,7 @@ export function HeaderMobileCameraMenu() {
   }, []);
 
   useLayoutEffect(() => {
-    if (!open) {
-      setPanelPos(null);
-      return;
-    }
+    if (!open) return;
     reposition();
     window.addEventListener("resize", reposition);
     window.addEventListener("scroll", reposition, true);
@@ -152,40 +143,49 @@ export function HeaderMobileCameraMenu() {
     timers.current.push(id);
   };
 
-  const toggleMenu = () => {
+  const applyToggle = useCallback(() => {
     if (open) {
       setOpen(false);
       return;
     }
-    if (busy.current) return;
-    busy.current = true;
     playShutterSound();
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduced) {
       setFlash(true);
       schedule(() => setFlash(false), FLASH_MS);
     }
-    schedule(() => {
-      const pos =
-        measurePanelPosition(buttonRef.current) ?? {
-          top: 80,
-          right: 16,
-        };
-      /* Aynı tick’te konum + open: ilk karede panel görünsün */
-      setPanelPos(pos);
-      setOpen(true);
-      busy.current = false;
-    }, reduced ? 0 : 140);
+    const pos =
+      measurePanelPosition(buttonRef.current) ?? {
+        top: 80,
+        right: 16,
+      };
+    setPanelPos(pos);
+    setOpen(true);
+  }, [open]);
+
+  const onButtonTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (ghostClickTimerRef.current) clearTimeout(ghostClickTimerRef.current);
+    touchHandledRef.current = true;
+    applyToggle();
+    ghostClickTimerRef.current = setTimeout(() => {
+      touchHandledRef.current = false;
+      ghostClickTimerRef.current = null;
+    }, GHOST_CLICK_MS);
+  };
+
+  const onButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (touchHandledRef.current) return;
+    applyToggle();
   };
 
   const portal =
-    mounted &&
     open &&
     panelPos &&
     typeof document !== "undefined"
       ? createPortal(
           <>
-            {/* md:hidden yok: sadece open iken render; üretimde viewport/desktop-mode uyumsuzluğunda menü kaybolmasın */}
             <button
               type="button"
               aria-label="Menüyü kapat"
@@ -205,6 +205,7 @@ export function HeaderMobileCameraMenu() {
               }}
               role="menu"
               aria-label="Gezinme"
+              onClick={(e) => e.stopPropagation()}
             >
               {NAV_ITEMS.map((item) => (
                 <Link
@@ -235,17 +236,18 @@ export function HeaderMobileCameraMenu() {
 
       {portal}
 
-      <div className="relative z-[40] md:hidden">
+      <div className="relative z-[80] md:hidden">
         <button
           ref={buttonRef}
           type="button"
-          onClick={toggleMenu}
+          onTouchEnd={onButtonTouchEnd}
+          onClick={onButtonClick}
           aria-expanded={open}
           aria-haspopup="true"
           aria-label={open ? "Menüyü kapat — deklanşör" : "Menüyü aç — deklanşör"}
-          className="flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-xl border border-white/[0.12] bg-[#0c1218]/40 text-[#c8dff2] backdrop-blur-sm active:scale-[0.97]"
+          className="flex h-11 w-11 shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center rounded-xl border border-white/[0.12] bg-[#0c1218]/40 text-[#c8dff2] backdrop-blur-sm active:scale-[0.97]"
         >
-          <CameraIcon className="h-6 w-6" aria-hidden />
+          <CameraIcon className="pointer-events-none h-6 w-6" aria-hidden />
         </button>
       </div>
     </>

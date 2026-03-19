@@ -11,7 +11,7 @@ const caveatHeader = Caveat({
 
 export function SiteHeader() {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.06] px-6 py-5 md:px-10">
+    <header className="relative z-[50] isolate flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.06] px-6 py-5 md:px-10">
       <Link
         href="/"
         className={`${caveatHeader.className} font-semibold tracking-[0.06em]`}
