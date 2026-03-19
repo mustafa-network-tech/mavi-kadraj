@@ -129,3 +129,32 @@ body {
     animation: none;
   }
 }
+
+/* Ana sayfa hero: sahne başına tek slogan — 7s (0s görünür başlangıç 0.05 → 2.5s’e 1 → 5s’e kadar 1 → 7s’e 0) */
+@keyframes mk-hero-slogan-cycle {
+  0% {
+    opacity: 0.05;
+  }
+  35.71% {
+    opacity: 1;
+  }
+  71.43% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.mk-hero-slogan {
+  animation: mk-hero-slogan-cycle 7s ease-in-out forwards;
+  transition: opacity 1.8s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-hero-slogan {
+    animation: none;
+    transition: none;
+    opacity: 0.92;
+  }
+}

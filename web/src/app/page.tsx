@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Caveat } from "next/font/google";
-import { HeroBackgroundSlideshow } from "@/components/HeroBackgroundSlideshow";
 import { HeroHomeSnow } from "@/components/HeroHomeSnow";
-import { HeroRotatingTaglines } from "@/components/HeroRotatingTaglines";
+import { HeroStoryFlow } from "@/components/HeroStoryFlow";
 import { SiteHeader } from "@/components/SiteHeader";
 import { HomeBelowHeroLayers } from "@/components/HomeBelowHeroLayers";
 import { site } from "@/lib/site";
@@ -50,16 +49,16 @@ export default function HomePage() {
       >
         {/* Üst çizgi: soldan sağa uçtan uca */}
         <div className="h-px w-full bg-white/45" aria-hidden />
-        {/* Arka plan: hero.jpg → hero1–4, 3,5 sn’de döner */}
+        {/* Hikâye akışı: 5 sahne × 7 sn; başlık + tek slogan (yan sloganlar kaldırıldı) */}
         <div className="relative min-h-[min(44vh,420px)] w-full overflow-hidden sm:min-h-[min(48vh,480px)] md:min-h-[min(64vh,720px)] lg:min-h-[min(72vh,820px)]">
-          <HeroBackgroundSlideshow />
-          {/* Karartma — yazılar okunaklı kalsın */}
+          <HeroStoryFlow />
+          {/* Hafif karartma — metin fotoğrafa “yapışmış” değil, içinden geliyormuş hissi */}
           <div
-            className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0c1218]/80 via-[#0c1218]/60 to-[#0c1218]/85"
+            className="pointer-events-none absolute inset-0 z-[10] bg-gradient-to-b from-[#0c1218]/65 via-[#0c1218]/38 to-[#0c1218]/78"
             aria-hidden
           />
           <div className="absolute inset-0 z-[18] flex flex-col">
-            {/* Orta: yalnızca başlık */}
+            {/* Orta: yalnızca site adı */}
             <div className="flex flex-1 items-center justify-center px-6 pt-16 pb-8 sm:pt-20 md:pt-24">
               <h1
                 className={`${maviKadrajHand.className} text-center font-semibold leading-[1.06] tracking-[0.035em] sm:tracking-[0.045em]`}
@@ -85,7 +84,6 @@ export default function HomePage() {
                 </span>
               </h1>
             </div>
-            <HeroRotatingTaglines />
           </div>
         </div>
         </section>
