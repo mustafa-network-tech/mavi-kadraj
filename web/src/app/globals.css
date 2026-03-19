@@ -19,6 +19,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Mobilde 100vw / taşan katmanlardan yatay kaydırma (sayfa “kayması”) azaltılır */
+  overflow-x: clip;
 }
 
 body {
