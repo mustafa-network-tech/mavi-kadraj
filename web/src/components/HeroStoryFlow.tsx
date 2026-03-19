@@ -11,31 +11,31 @@ const SCENES = [
     src: "/hero/hero.jpg",
     slogan: "bazı anlar yaşanmaz… içinden geçilir.",
     placeClass:
-      "left-[6%] bottom-[13%] sm:left-[8%] sm:bottom-[16%] max-w-[min(88vw,15.5rem)] text-left",
+      "left-1/2 bottom-[15%] sm:bottom-[17%] -translate-x-1/2 text-center max-w-[min(92vw,22rem)]",
   },
   {
     src: "/hero/hero1.jpg",
     slogan: "giden dalga değil… kalan izdir.",
     placeClass:
-      "right-[6%] bottom-[15%] sm:right-[9%] max-w-[min(86vw,15rem)] text-right",
+      "left-1/2 bottom-[15%] sm:bottom-[17%] -translate-x-1/2 text-center max-w-[min(92vw,22rem)]",
   },
   {
     src: "/hero/hero2.jpg",
     slogan: "güneş batmaz… sadece gözden çekilir.",
     placeClass:
-      "left-[7%] bottom-[12%] sm:bottom-[15%] max-w-[min(84vw,14.5rem)] text-left",
+      "left-1/2 bottom-[15%] sm:bottom-[17%] -translate-x-1/2 text-center max-w-[min(92vw,22rem)]",
   },
   {
     src: "/hero/hero3.jpg",
     slogan: "deniz konuşmaz… ama susturur.",
     placeClass:
-      "right-[7%] bottom-[21%] sm:right-[9%] sm:bottom-[25%] max-w-[min(82vw,14rem)] text-right",
+      "left-1/2 bottom-[15%] sm:bottom-[17%] -translate-x-1/2 text-center max-w-[min(92vw,22rem)]",
   },
   {
     src: "/hero/hero4.jpg",
     slogan: "yükselen şey balon değil… insanın içidir.",
     placeClass:
-      "left-[7%] bottom-[11%] sm:left-[11%] max-w-[min(90vw,16rem)] text-left",
+      "left-1/2 bottom-[15%] sm:bottom-[17%] -translate-x-1/2 text-center max-w-[min(92vw,22rem)]",
   },
 ] as const;
 
