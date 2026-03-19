@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Outfit, Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
@@ -35,6 +35,13 @@ const inter = Inter({
   weight: ["400"],
   variable: "--font-inter",
 });
+
+/** Mobil tarayıcıların gerçek genişliği kullanması — aksi halde `md:` yanlış eşleşebilir */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0c1218",
+};
 
 export const metadata: Metadata = {
   title: {

@@ -12,10 +12,11 @@ import {
 
 const SOUND_PATH = "/sounds/shutter.mp3";
 const FLASH_MS = 320;
-/** Sayfa içeriğinin üstünde kalsın (layout / kar / bölüm katmanları) */
-const Z_BACKDROP = 9000;
-const Z_PANEL = 9100;
-const Z_FLASH = 9500;
+/** Yüksek değerler: üretimde grain / lightbox / hero katmanlarının üstünde kalsın */
+const Z_BACKDROP = 50000;
+const Z_PANEL = 50100;
+/** Flaş, menüden düşük — bazı cihazlarda üst üste binme sorununu önler */
+const Z_FLASH = 50080;
 
 function playHarshShutterSynth() {
   const AC =
@@ -184,21 +185,23 @@ export function HeaderMobileCameraMenu() {
     typeof document !== "undefined"
       ? createPortal(
           <>
+            {/* md:hidden yok: sadece open iken render; üretimde viewport/desktop-mode uyumsuzluğunda menü kaybolmasın */}
             <button
               type="button"
               aria-label="Menüyü kapat"
-              className="fixed inset-0 bg-black/35 md:hidden"
+              className="fixed inset-0 bg-black/40"
               style={{ zIndex: Z_BACKDROP }}
               onClick={() => setOpen(false)}
             />
             <nav
-              className="fixed w-[min(220px,calc(100vw-1.5rem))] rounded-xl border border-white/[0.12] bg-[#121a22]/98 py-1 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-md md:hidden"
+              className="fixed w-[min(220px,calc(100vw-1.5rem))] rounded-xl border border-white/[0.12] bg-[#121a22] py-1 shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
               style={{
                 zIndex: Z_PANEL,
                 top: panelPos.top,
                 right: panelPos.right,
                 maxHeight: "min(70vh, 320px)",
                 overflowY: "auto",
+                WebkitOverflowScrolling: "touch",
               }}
               role="menu"
               aria-label="Gezinme"
