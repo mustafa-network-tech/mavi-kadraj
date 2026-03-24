@@ -1,19 +1,9 @@
 import type { NextConfig } from "next";
 
-/** Üretim: Vercel (medya / görseller CDN + edge). `next build --webpack` — Next 16 varsayılan Turbopack ile webpack() çakışmasını önler. */
+/** Üretim: Vercel (medya / görseller CDN + edge). */
 const nextConfig: NextConfig = {
   /* Dev’de Strict Mode bileşeni iki kez mount eder; canvas/kar katmanı ile bazen lokal titreme. Prod’da çift mount zaten yok. */
   reactStrictMode: false,
-  webpack: (config, { dev, isServer }) => {
-    if (dev && !isServer) {
-      config.watchOptions = {
-        ...config.watchOptions,
-        aggregateTimeout: 600,
-        ignored: ["**/node_modules/**", "**/.git/**"],
-      };
-    }
-    return config;
-  },
   images: {
     remotePatterns: [
       {
