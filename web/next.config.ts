@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+/** Üretim: Vercel (medya / görseller CDN + edge). */
 const nextConfig: NextConfig = {
   /* Dev’de Strict Mode bileşeni iki kez mount eder; canvas/kar katmanı ile bazen lokal titreme. Prod’da çift mount zaten yok. */
   reactStrictMode: false,
