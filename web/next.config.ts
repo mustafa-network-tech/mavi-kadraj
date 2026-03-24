@@ -1,6 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* Dev’de Strict Mode bileşeni iki kez mount eder; canvas/kar katmanı ile bazen lokal titreme. Prod’da çift mount zaten yok. */
+  reactStrictMode: false,
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        aggregateTimeout: 600,
+        ignored: ["**/node_modules/**", "**/.git/**"],
+      };
+    }
+    return config;
+  },
   images: {
     remotePatterns: [
       {

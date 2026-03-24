@@ -47,13 +47,13 @@ export function GalleryLightbox({ gallery }: { gallery: GalleryImage[] }) {
               onClick={() => setOpenIndex(i)}
               className="w-full cursor-pointer rounded-2xl bg-[var(--mk-bg-soft)] shadow-[0_16px_56px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.14] transition duration-500 ease-out hover:scale-[1.03] hover:shadow-[0_20px_64px_rgba(91,143,199,0.22)] hover:ring-[var(--mk-accent)]/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mk-accent)]"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-[3/2]">
+              <div className="relative z-[1] aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-[3/2]">
                 <Image
                   src={img.src}
                   alt={img.alt}
                   fill
                   className="object-cover brightness-[0.98] transition duration-500 group-hover:brightness-100"
-                  sizes="(max-width: 640px) 50vw, 45vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 40vw, 360px"
                 />
               </div>
             </button>

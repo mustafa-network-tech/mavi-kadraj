@@ -59,14 +59,25 @@ export function HeaderSnow({ children }: { children: React.ReactNode }) {
 
     const resize = () => {
       const r = zone.getBoundingClientRect();
-      w = Math.max(1, r.width);
-      h = Math.max(1, r.height);
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const nextW = Math.max(1, Math.round(r.width));
+      const nextH = Math.max(1, Math.round(r.height));
+      const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const nextCw = Math.floor(nextW * nextDpr);
+      const nextCh = Math.floor(nextH * nextDpr);
+
+      w = nextW;
+      h = nextH;
+      dpr = nextDpr;
+
+      const sameBuffer =
+        flakes.length > 0 && canvas.width === nextCw && canvas.height === nextCh;
+      if (sameBuffer) return;
+
+      canvas.width = nextCw;
+      canvas.height = nextCh;
+      canvas.style.width = `${nextW}px`;
+      canvas.style.height = `${nextH}px`;
+      ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
 
       if (flakes.length === 0) {
         const guessLine = Math.min(96, h);
@@ -79,10 +90,19 @@ export function HeaderSnow({ children }: { children: React.ReactNode }) {
       }
     };
 
+    let resizeRaf = 0;
+    const scheduleResize = () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        resize();
+      });
+    };
+
     resize();
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => scheduleResize());
     ro.observe(zone);
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", scheduleResize);
 
     const tick = (t: number) => {
       const dt = Math.min((t - last) / 1000, 0.05);
@@ -109,8 +129,9 @@ export function HeaderSnow({ children }: { children: React.ReactNode }) {
     raf = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(raf);
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
       ro.disconnect();
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", scheduleResize);
     };
   }, []);
 

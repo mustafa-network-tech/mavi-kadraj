@@ -65,7 +65,7 @@ export default function KadrajYansimalariPage() {
                 >
                   <div className="relative w-[88%] max-w-[min(92vw,320px)] sm:w-[85%] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[520px]">
                     <div
-                      className={`relative w-full aspect-[5/3.45] overflow-hidden rounded-[clamp(1.35rem,4.2vw,2.75rem)] shadow-[0_16px_56px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.14] transition duration-500 ease-out group-hover:scale-[1.03] group-hover:shadow-[0_20px_64px_rgba(91,143,199,0.22)] group-hover:ring-[var(--mk-accent)]/35 ${
+                      className={`relative z-[1] w-full aspect-[5/3.45] overflow-hidden rounded-[clamp(1.35rem,4.2vw,2.75rem)] shadow-[0_16px_56px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.14] transition duration-500 ease-out group-hover:scale-[1.03] group-hover:shadow-[0_20px_64px_rgba(91,143,199,0.22)] group-hover:ring-[var(--mk-accent)]/35 ${
                         "cardFit" in item && item.cardFit === "contain"
                           ? "bg-[#141a22]"
                           : ""
@@ -80,7 +80,7 @@ export default function KadrajYansimalariPage() {
                             ? "object-contain object-center brightness-[1] contrast-[1.02]"
                             : "object-cover brightness-[0.98]"
                         }`}
-                        sizes="(max-width: 640px) 46vw, (max-width: 1024px) 38vw, 520px"
+                        sizes="(max-width: 640px) 46vw, (max-width: 1024px) 38vw, (max-width: 1536px) 480px, 520px"
                       />
                     </div>
                   </div>
