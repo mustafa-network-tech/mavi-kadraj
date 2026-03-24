@@ -1,7 +1,12 @@
+import path from "path";
 import type { NextConfig } from "next";
 
 /** Üretim: Vercel (medya / görseller CDN + edge). */
 const nextConfig: NextConfig = {
+  /* Next 16: varsayılan prod build Turbopack; webpack() ile birlikte boş turbopack gerekir */
+  turbopack: {
+    root: path.join(__dirname, ".."),
+  },
   /* Dev’de Strict Mode bileşeni iki kez mount eder; canvas/kar katmanı ile bazen lokal titreme. Prod’da çift mount zaten yok. */
   reactStrictMode: false,
   webpack: (config, { dev, isServer }) => {
