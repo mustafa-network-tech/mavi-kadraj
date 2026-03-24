@@ -79,7 +79,7 @@ export default async function CategoryPage({
         <SiteHeader />
       </HeaderSnow>
       <section
-        className="relative flex min-h-[72vh] w-full flex-1 flex-col"
+        className="relative flex w-full min-h-0 flex-1 flex-col md:min-h-[72vh]"
         aria-label={ref?.label ?? videoReflection.label}
       >
         <WaveBandBackground />

@@ -21,6 +21,8 @@ html {
   scroll-behavior: smooth;
   /* Mobilde 100vw / taşan katmanlardan yatay kaydırma (sayfa “kayması”) azaltılır */
   overflow-x: clip;
+  /* 100vh mobilde adres çubuğu ile “hayalet” boşluk; dvh gerçek görünür alan */
+  min-height: 100dvh;
 }
 
 body {
@@ -29,7 +31,8 @@ body {
   font-family: var(--font-outfit), system-ui, sans-serif;
   font-weight: 300;
   line-height: 1.7;
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
 }
 
 .mk-grain {

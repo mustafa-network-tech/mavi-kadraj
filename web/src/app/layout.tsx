@@ -72,9 +72,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" className={`${cormorant.variable} ${outfit.variable} ${playfair.variable} ${inter.variable}`}>
-      <body className="relative min-h-screen antialiased">
+      <body className="relative min-h-[100dvh] overflow-x-clip antialiased">
         <div className="mk-grain" aria-hidden />
-        <div className="relative z-10 flex min-h-screen flex-col">{children}</div>
+        <div className="relative z-10 flex min-h-[100dvh] flex-col">{children}</div>
       </body>
     </html>
   );

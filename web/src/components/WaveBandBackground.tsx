@@ -51,7 +51,7 @@ function WaveTo({
 export function WaveBandBackground() {
   return (
     <div
-      className="pointer-events-none absolute inset-0 z-0 flex min-h-full w-full flex-col"
+      className="pointer-events-none absolute inset-0 z-0 flex min-h-full w-full flex-col overflow-hidden"
       aria-hidden
     >
       {WAVE_BAND_COLORS.map((color, i) => {

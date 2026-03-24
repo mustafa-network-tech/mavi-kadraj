@@ -68,7 +68,7 @@ export function HomeBelowHeroLayers() {
 
   return (
     <section
-      className="relative flex w-full min-h-[72vh] flex-1 flex-col"
+      className="relative flex w-full min-h-0 flex-1 flex-col md:min-h-[72vh]"
       aria-label="İçerik"
     >
       <WaveBandBackground />

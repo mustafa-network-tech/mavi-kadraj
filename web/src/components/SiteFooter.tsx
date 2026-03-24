@@ -12,7 +12,7 @@ export function SiteFooter({
 }) {
   return (
     <footer
-      className={`relative w-full px-6 pb-[4.5rem] pt-10 ${className}`}
+      className={`relative w-full overflow-x-clip overflow-y-visible px-6 pb-28 pt-10 sm:pb-[4.5rem] ${className}`}
       style={style}
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center pb-8 text-center">
