@@ -13,7 +13,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "4.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -25,10 +25,11 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "sharp": "^0.34.1",
-    "tailwindcss": "^4",
+    "tailwindcss": "4.2.2",
     "typescript": "^5"
   },
   "optionalDependencies": {
+    "@tailwindcss/oxide-linux-x64-gnu": "4.2.2",
     "lightningcss-linux-x64-gnu": "1.32.0"
   }
 }
