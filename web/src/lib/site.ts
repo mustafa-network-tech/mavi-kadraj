@@ -162,48 +162,138 @@ export const yasamdanYansimalarVideos: YasamdanVideoItem[] = [
 export type ReflectionSlug = (typeof reflections)[number]["slug"];
 
 /**
- * Her kategori sayfasındaki galeri — WordPress’teki fotoğrafların URL’lerini buraya ekleyin.
- * Örnek görseller: picsum (geliştirme); üretimde kendi dosyalarınızla değiştirin.
+ * `public/yansimalar/` — dosya adları diskteki gibi (.jpg / .JPG ayrımı korunur).
+ * Galeriler: 11 + 11 + 11 + 12 görsel; kapak (reflections.image) ayrıca WP’de kalır.
  */
+const YANSIMALAR_FILES = [
+  "yansimalar (1).JPG",
+  "yansimalar (2).JPG",
+  "yansimalar (3).JPG",
+  "yansimalar (4).JPG",
+  "yansimalar (5).JPG",
+  "yansimalar (6).jpg",
+  "yansimalar (7).JPG",
+  "yansimalar (8).JPG",
+  "yansimalar (9).JPG",
+  "yansimalar (10).jpg",
+  "yansimalar (11).JPG",
+  "yansimalar (12).JPG",
+  "yansimalar (13).JPG",
+  "yansimalar (14).jpg",
+  "yansimalar (15).JPG",
+  "yansimalar (16).jpg",
+  "yansimalar (17).jpg",
+  "yansimalar (18).jpg",
+  "yansimalar (19).jpg",
+  "yansimalar (20).jpg",
+  "yansimalar (21).JPG",
+  "yansimalar (22).JPG",
+  "yansimalar (23).jpg",
+  "yansimalar (24).jpg",
+  "yansimalar (25).JPG",
+  "yansimalar (26).JPG",
+  "yansimalar (27).JPG",
+  "yansimalar (28).JPG",
+  "yansimalar (29).JPG",
+  "yansimalar (30).JPG",
+  "yansimalar (31).JPG",
+  "yansimalar (32).JPG",
+  "yansimalar (33).JPG",
+  "yansimalar (34).JPG",
+  "yansimalar (35).JPG",
+  "yansimalar (36).JPG",
+  "yansimalar (37).jpg",
+  "yansimalar (38).JPG",
+  "yansimalar (39).JPG",
+  "yansimalar (40).JPG",
+  "yansimalar (41).JPG",
+  "yansimalar (42).jpg",
+  "yansimalar (43).JPG",
+  "yansimalar (44).JPG",
+  "yansimalar (45).jpg",
+] as const;
+
+/** Yerel yansıma görseli — URL’de boşluk güvenli */
+function yansimaSrc(filename: string): string {
+  return `/yansimalar/${encodeURIComponent(filename)}`;
+}
+
+const W = 1600;
+const H = 1067;
+
+function yansimaGalleryItems(
+  files: readonly string[],
+  label: string,
+  captions: readonly string[],
+): GalleryImage[] {
+  return files.map((filename, i) => ({
+    src: yansimaSrc(filename),
+    alt: label,
+    width: W,
+    height: H,
+    caption: captions[i % captions.length],
+  }));
+}
+
+const CAP_SESSIZ = [
+  "Sesin olmadığı yerde, her şey daha net duyulur.",
+  "Konuşmayan anlar, en çok anlatanlardır.",
+  "Sessizlik, saklanan değil; fark edilen bir derinliktir.",
+  "Rüzgârın bile uğramadığı bir yerde, zaman yavaşlar.",
+  "Bazı anlar konuşmaz, sadece kalır.",
+  "Gürültü geçer, sessizlik iz bırakır.",
+  "Duyulmayan her şey, içimizde çoğalır.",
+  "Sessizlik, görünenin ötesinde kalan ilk histir.",
+] as const;
+
+const CAP_ZAMAN = [
+  "Zaman silmez; sadece görünmeyeni derinleştirir.",
+  "Geçen her an, geride sessiz bir iz bırakır.",
+  "Bazı izler kaybolmaz, sadece daha az görünür olur.",
+  "Zaman dokunur; biz fark ettiğimiz kadar değişiriz.",
+  "Eskimek değil, izlenmektir zamanın yaptığı.",
+  "Her şey geçer derler… izleri kalır.",
+  "Zaman, en çok hatırlanan yerlerde ağırlaşır.",
+  "Bir iz kalıyorsa, zaman oradan geçmiştir.",
+] as const;
+
+const CAP_INSAN = [
+  "İnsan nereye dokunursa orada bir iz kalır.",
+  "Sokaklar, yürüyenlerin sessiz hikâyesidir.",
+  "Duvarlar bazen konuşur; insan eli yazar.",
+  "Şehir, insanın bıraktığı izlerin toplamıdır.",
+  "Bazen en derin iz, sessiz olandır.",
+  "İz bırakmak, unutulmamak değil; dokunmaktır.",
+  "Her kapı, bir insanın geçtiği yerdir.",
+  "İnsan izi, bazen taşta, bazen bakışta kalır.",
+] as const;
+
+const CAP_YOLDAS = [
+  "Onlar konuşmaz… ama hep anlar.",
+  "Bir bakışları, bütün kelimelerden ağırdır.",
+  "Yanında sessizce duran, en gerçek olandır.",
+  "Sadakat, en çok onlarda görünür.",
+  "Sevgi bazen bir kuyruğun sessiz hareketidir.",
+  "Gitmezler… sadece beklerler.",
+  "Onlar için zaman yoktur; sadece sen varsın.",
+  "En temiz duygular, kelimesiz yaşanır.",
+] as const;
+
 export const categoryGalleries: Record<ReflectionSlug, GalleryImage[]> = {
-  sessizlik: [
-    { src: "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/tepekoy4%E2%9C%A8-1024x683.jpg", alt: "Sessizlik", width: 1024, height: 683, caption: "Sesin olmadığı yerde, her şey daha net duyulur." },
-    { src: "https://picsum.photos/seed/mk-sessiz-2/1200/800", alt: "Sessizlik", width: 1200, height: 800, caption: "Konuşmayan anlar, en çok anlatanlardır." },
-    { src: "https://picsum.photos/seed/mk-sessiz-3/900/1200", alt: "Sessizlik", width: 900, height: 1200, caption: "Sessizlik, saklanan değil; fark edilen bir derinliktir." },
-    { src: "https://picsum.photos/seed/mk-sessiz-4/1000/750", alt: "Sessizlik", width: 1000, height: 750, caption: "Rüzgârın bile uğramadığı bir yerde, zaman yavaşlar." },
-    { src: "https://picsum.photos/seed/mk-sessiz-5/800/800", alt: "Sessizlik", width: 800, height: 800, caption: "Bazı anlar konuşmaz, sadece kalır." },
-    { src: "https://picsum.photos/seed/mk-sessiz-6/1100/700", alt: "Sessizlik", width: 1100, height: 700, caption: "Gürültü geçer, sessizlik iz bırakır." },
-    { src: "https://picsum.photos/seed/mk-sessiz-7/1000/800", alt: "Sessizlik", width: 1000, height: 800, caption: "Duyulmayan her şey, içimizde çoğalır." },
-    { src: "https://picsum.photos/seed/mk-sessiz-8/1200/700", alt: "Sessizlik", width: 1200, height: 700, caption: "Sessizlik, görünenin ötesinde kalan ilk histir." },
-  ],
-  "zamanin-izleri": [
-    { src: "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/kalekoy3%E2%9C%A8-2048x1365.jpg", alt: "Zamanın İzleri", width: 1200, height: 800, caption: "Zaman silmez; sadece görünmeyeni derinleştirir." },
-    { src: "https://picsum.photos/seed/mk-zaman-2/1200/900", alt: "Zamanın İzleri", width: 1200, height: 900, caption: "Geçen her an, geride sessiz bir iz bırakır." },
-    { src: "https://picsum.photos/seed/mk-zaman-3/900/1100", alt: "Zamanın İzleri", width: 900, height: 1100, caption: "Bazı izler kaybolmaz, sadece daha az görünür olur." },
-    { src: "https://picsum.photos/seed/mk-zaman-4/1000/1000", alt: "Zamanın İzleri", width: 1000, height: 1000, caption: "Zaman dokunur; biz fark ettiğimiz kadar değişiriz." },
-    { src: "https://picsum.photos/seed/mk-zaman-5/1300/780", alt: "Zamanın İzleri", width: 1300, height: 780, caption: "Eskimek değil, izlenmektir zamanın yaptığı." },
-    { src: "https://picsum.photos/seed/mk-zaman-6/800/1200", alt: "Zamanın İzleri", width: 800, height: 1200, caption: "Her şey geçer derler… izleri kalır." },
-    { src: "https://picsum.photos/seed/mk-zaman-7/1100/800", alt: "Zamanın İzleri", width: 1100, height: 800, caption: "Zaman, en çok hatırlanan yerlerde ağırlaşır." },
-    { src: "https://picsum.photos/seed/mk-zaman-8/1000/900", alt: "Zamanın İzleri", width: 1000, height: 900, caption: "Bir iz kalıyorsa, zaman oradan geçmiştir." },
-  ],
-  "insan-izleri": [
-    { src: "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/tasduvar_gul-768x512.jpg", alt: "İnsan İzleri", width: 768, height: 512, caption: "İnsan nereye dokunursa orada bir iz kalır." },
-    { src: "https://picsum.photos/seed/mk-insan-2/1000/800", alt: "İnsan İzleri", width: 1000, height: 800, caption: "Sokaklar, yürüyenlerin sessiz hikâyesidir." },
-    { src: "https://picsum.photos/seed/mk-insan-3/900/900", alt: "İnsan İzleri", width: 900, height: 900, caption: "Duvarlar bazen konuşur; insan eli yazar." },
-    { src: "https://picsum.photos/seed/mk-insan-4/1200/800", alt: "İnsan İzleri", width: 1200, height: 800, caption: "Şehir, insanın bıraktığı izlerin toplamıdır." },
-    { src: "https://picsum.photos/seed/mk-insan-5/800/1100", alt: "İnsan İzleri", width: 800, height: 1100, caption: "Bazen en derin iz, sessiz olandır." },
-    { src: "https://picsum.photos/seed/mk-insan-6/1000/700", alt: "İnsan İzleri", width: 1000, height: 700, caption: "İz bırakmak, unutulmamak değil; dokunmaktır." },
-    { src: "https://picsum.photos/seed/mk-insan-7/1100/900", alt: "İnsan İzleri", width: 1100, height: 900, caption: "Her kapı, bir insanın geçtiği yerdir." },
-    { src: "https://picsum.photos/seed/mk-insan-8/900/800", alt: "İnsan İzleri", width: 900, height: 800, caption: "İnsan izi, bazen taşta, bazen bakışta kalır." },
-  ],
-  "sessiz-yoldaslar": [
-    { src: "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/cropped-harabe-ev-_mavikadraj.mustafa-scaled-1-1024x682.jpg", alt: "Sessiz Yoldaşlar", width: 1024, height: 682, caption: "Onlar konuşmaz… ama hep anlar." },
-    { src: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1100", alt: "Sessiz Yoldaşlar", width: 1100, height: 750, caption: "Bir bakışları, bütün kelimelerden ağırdır." },
-    { src: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900", alt: "Sessiz Yoldaşlar", width: 900, height: 1000, caption: "Yanında sessizce duran, en gerçek olandır." },
-    { src: "https://images.unsplash.com/photo-1606567595334-d39972c85dbe?q=80&w=1000&auto=format&fit=crop", alt: "Sessiz Yoldaşlar", width: 1000, height: 1000, caption: "Sadakat, en çok onlarda görünür." },
-    { src: "https://images.unsplash.com/photo-1535930749574-1399327ce78f?w=1200", alt: "Sessiz Yoldaşlar", width: 1200, height: 900, caption: "Sevgi bazen bir kuyruğun sessiz hareketidir." },
-    { src: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800", alt: "Sessiz Yoldaşlar", width: 800, height: 800, caption: "Gitmezler… sadece beklerler." },
-    { src: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=1000", alt: "Sessiz Yoldaşlar", width: 1000, height: 850, caption: "Onlar için zaman yoktur; sadece sen varsın." },
-    { src: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=1100", alt: "Sessiz Yoldaşlar", width: 1100, height: 800, caption: "En temiz duygular, kelimesiz yaşanır." },
-  ],
+  sessizlik: yansimaGalleryItems(YANSIMALAR_FILES.slice(0, 11), "Sessizlik", CAP_SESSIZ),
+  "zamanin-izleri": yansimaGalleryItems(
+    YANSIMALAR_FILES.slice(11, 22),
+    "Zamanın İzleri",
+    CAP_ZAMAN,
+  ),
+  "insan-izleri": yansimaGalleryItems(
+    YANSIMALAR_FILES.slice(22, 33),
+    "İnsan İzleri",
+    CAP_INSAN,
+  ),
+  "sessiz-yoldaslar": yansimaGalleryItems(
+    YANSIMALAR_FILES.slice(33, 45),
+    "Sessiz Yoldaşlar",
+    CAP_YOLDAS,
+  ),
 };
