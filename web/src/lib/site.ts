@@ -25,8 +25,13 @@ export type GalleryImage = {
   caption?: string;
 };
 
+/** `public/yansimalar/` — URL’de boşluk ve parantez güvenli */
+function yansimaSrc(filename: string): string {
+  return `/yansimalar/${encodeURIComponent(filename)}`;
+}
+
 /**
- * Kadraj yansımaları — kapak görselleri.
+ * Kadraj yansımaları — kapak görselleri (`public/yansimalar/`).
  * cardFit: "contain" = oval içinde fotoğrafın tamamı görünür (yatay kareler için).
  */
 export const reflections = [
@@ -35,10 +40,9 @@ export const reflections = [
     label: "Sessizlik",
     /** Metin: başlığın hemen altında, fotoğraf kategorisini anlatan bir cümle. */
     intro: "",
-    image:
-      "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/tepekoy4%E2%9C%A8-1024x683.jpg",
-    width: 1024,
-    height: 683,
+    image: yansimaSrc("yansimalar (3).JPG"),
+    width: 1600,
+    height: 1067,
     cardFit: "contain" as const,
     cardAspect: "5/6" as const,
   },
@@ -46,10 +50,9 @@ export const reflections = [
     slug: "zamanin-izleri",
     label: "Zamanın İzleri",
     intro: "",
-    image:
-      "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/kalekoy3%E2%9C%A8-2048x1365.jpg",
-    width: 2048,
-    height: 1365,
+    image: yansimaSrc("yansimalar (5).JPG"),
+    width: 1600,
+    height: 1067,
     cardFit: "contain" as const,
     cardAspect: "5/6" as const,
   },
@@ -57,19 +60,17 @@ export const reflections = [
     slug: "insan-izleri",
     label: "İnsan İzleri",
     intro: "",
-    image:
-      "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/tasduvar_gul-768x512.jpg",
-    width: 768,
-    height: 512,
+    image: yansimaSrc("yansimalar (25).JPG"),
+    width: 1600,
+    height: 1067,
   },
   {
     slug: "sessiz-yoldaslar",
     label: "Sessiz Yoldaşlar",
     intro: "",
-    image:
-      "https://www.mavikadraj.com.tr/wp-content/uploads/2025/12/cropped-harabe-ev-_mavikadraj.mustafa-scaled-1-1024x682.jpg",
-    width: 1024,
-    height: 682,
+    image: yansimaSrc("yansimalar (38).JPG"),
+    width: 1600,
+    height: 1067,
   },
 ] as const;
 
@@ -163,7 +164,7 @@ export type ReflectionSlug = (typeof reflections)[number]["slug"];
 
 /**
  * `public/yansimalar/` — dosya adları diskteki gibi (.jpg / .JPG ayrımı korunur).
- * Galeriler: 11 + 11 + 11 + 12 görsel; kapak (reflections.image) ayrıca WP’de kalır.
+ * Galeriler: 11 + 11 + 11 + 12 görsel; kapaklar `reflections.image` ile ayrı dosyalar.
  */
 const YANSIMALAR_FILES = [
   "yansimalar (1).JPG",
@@ -212,11 +213,6 @@ const YANSIMALAR_FILES = [
   "yansimalar (44).JPG",
   "yansimalar (45).jpg",
 ] as const;
-
-/** Yerel yansıma görseli — URL’de boşluk güvenli */
-function yansimaSrc(filename: string): string {
-  return `/yansimalar/${encodeURIComponent(filename)}`;
-}
 
 const W = 1600;
 const H = 1067;
