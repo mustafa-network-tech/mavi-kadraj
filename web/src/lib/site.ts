@@ -30,6 +30,11 @@ function yansimaSrc(filename: string): string {
   return `/yansimalar/${encodeURIComponent(filename)}`;
 }
 
+/** `public/yansimalar/golcuk-tabiat/` */
+function golcukTabiatSrc(filename: string): string {
+  return `/yansimalar/golcuk-tabiat/${encodeURIComponent(filename)}`;
+}
+
 /**
  * Kadraj yansımaları — kapak görselleri (`public/yansimalar/`).
  * cardFit: "contain" = oval içinde fotoğrafın tamamı görünür (yatay kareler için).
@@ -69,6 +74,14 @@ export const reflections = [
     label: "Sessiz Yoldaşlar",
     intro: "",
     image: yansimaSrc("yansimalar (38).JPG"),
+    width: 1600,
+    height: 1067,
+  },
+  {
+    slug: "golcuk-tabiat-parki",
+    label: "Gölcük Tabiat Parkı",
+    intro: "",
+    image: golcukTabiatSrc("golcuk-8.JPG"),
     width: 1600,
     height: 1067,
   },
@@ -231,6 +244,20 @@ function yansimaGalleryItems(
   }));
 }
 
+function golcukGalleryItems(
+  files: readonly string[],
+  label: string,
+  captions: readonly string[],
+): GalleryImage[] {
+  return files.map((filename, i) => ({
+    src: golcukTabiatSrc(filename),
+    alt: label,
+    width: W,
+    height: H,
+    caption: captions[i % captions.length],
+  }));
+}
+
 const CAP_SESSIZ = [
   "Sesin olmadığı yerde, her şey daha net duyulur.",
   "Konuşmayan anlar, en çok anlatanlardır.",
@@ -275,6 +302,28 @@ const CAP_YOLDAS = [
   "En temiz duygular, kelimesiz yaşanır.",
 ] as const;
 
+const GOLCUK_TABIAT_FILES = [
+  "golcuk-1.JPG",
+  "golcuk-2.JPG",
+  "golcuk-3.JPG",
+  "golcuk-4.JPG",
+  "golcuk-5.JPG",
+  "golcuk-6.JPG",
+  "golcuk-7.JPG",
+  "golcuk-8.JPG",
+] as const;
+
+const CAP_GOLCUK = [
+  "Gölün yüzünde, gökyüzü iki kez görünür.",
+  "Ormanın içinde yürümek, zamanı yavaşlatmaktır.",
+  "Yeşilin her tonu, sessiz bir nefes gibidir.",
+  "Su durduğunda, her şey daha net yansır.",
+  "Doğa konuşmaz; sadece var olur.",
+  "Gölcük’te sessizlik, gürültüden daha doludur.",
+  "Yaprakların arasından süzülen ışık, en sakin hikâyedir.",
+  "Tabiat parkında kalan her iz, geçici değildir.",
+] as const;
+
 export const categoryGalleries: Record<ReflectionSlug, GalleryImage[]> = {
   sessizlik: yansimaGalleryItems(YANSIMALAR_FILES.slice(0, 11), "Sessizlik", CAP_SESSIZ),
   "zamanin-izleri": yansimaGalleryItems(
@@ -291,5 +340,10 @@ export const categoryGalleries: Record<ReflectionSlug, GalleryImage[]> = {
     YANSIMALAR_FILES.slice(33, 45),
     "Sessiz Yoldaşlar",
     CAP_YOLDAS,
+  ),
+  "golcuk-tabiat-parki": golcukGalleryItems(
+    GOLCUK_TABIAT_FILES,
+    "Gölcük Tabiat Parkı",
+    CAP_GOLCUK,
   ),
 };

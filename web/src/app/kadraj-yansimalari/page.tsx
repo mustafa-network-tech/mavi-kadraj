@@ -11,7 +11,8 @@ import { reflections } from "@/lib/site";
 
 export const metadata = {
   title: "kadraj yansımaları",
-  description: "Sessizlik, Zaman, İnsan İzleri, Sessiz Yoldaşlar — Mavi Kadraj",
+  description:
+    "Sessizlik, Zaman, İnsan İzleri, Sessiz Yoldaşlar, Gölcük Tabiat Parkı — Mavi Kadraj",
 };
 
 export default function KadrajYansimalariPage() {
