@@ -30,11 +30,11 @@ export function SiteHeader() {
           <Link href="/kadraj-yansimalari" className="hover:text-[var(--mk-accent)]">
             Kadraj yansımaları
           </Link>
-          <Link href="/yasamdan-yansimalar" className="hover:text-[var(--mk-accent)]">
-            Yaşamdan Yansımalar
-          </Link>
           <Link href="/kadrajin-otesi" className="hover:text-[var(--mk-accent)]">
-            Kadrajın Ötesi
+            Kadrajın Ötesinde
+          </Link>
+          <Link href="/mavi-kadraj-kimdir" className="hover:text-[var(--mk-accent)]">
+            Mavi Kadraj Kimdir
           </Link>
         </nav>
         <HeaderMobileCameraMenu />

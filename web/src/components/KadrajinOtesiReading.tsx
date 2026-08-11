@@ -38,19 +38,11 @@ export function KadrajinOtesiReading({
   paragraphs: readonly string[];
 }) {
   return (
-    <div
-      className="mt-12 flex flex-col md:mt-16"
-      style={{ gap: "clamp(40px, 5vw, 64px)" }}
-    >
+    <div className="beyond-reading">
       {paragraphs.map((block, i) => (
         <p
           key={i}
-          className="text-center leading-[1.9] tracking-[0.02em]"
-          style={{
-            fontFamily: "var(--font-cormorant), Georgia, serif",
-            fontSize: "clamp(15px, 1.2vw, 18px)",
-            color: "rgba(255,255,255,0.78)",
-          }}
+          className="reveal-up"
         >
           {block.split("\n").map((line, j) => (
             <span key={j}>

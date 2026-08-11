@@ -8,10 +8,9 @@ const Z_BACKDROP = 50000;
 const Z_PANEL = 50100;
 
 const NAV_ITEMS = [
-  { href: "/", label: "Ana sayfa" },
   { href: "/kadraj-yansimalari", label: "Kadraj yansımaları" },
-  { href: "/yasamdan-yansimalar", label: "Yaşamdan Yansımalar" },
-  { href: "/kadrajin-otesi", label: "Kadrajın Ötesi" },
+  { href: "/kadrajin-otesi", label: "Kadrajın Ötesinde" },
+  { href: "/mavi-kadraj-kimdir", label: "Mavi Kadraj Kimdir" },
 ] as const;
 
 function measureUnderButton(
