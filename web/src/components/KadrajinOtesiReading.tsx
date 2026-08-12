@@ -1,4 +1,5 @@
 import { KADRAJIN_OTESI_HIGHLIGHT_PHRASES } from "@/lib/kadrajinOtesi";
+import type { KadrajinOtesiReadingImage } from "@/lib/kadrajinOtesi";
 import Image from "next/image";
 
 function highlightPhrases(
@@ -40,6 +41,7 @@ export function KadrajinOtesiReading({
   imageClass = "wide",
   imageWidth = 1800,
   imageHeight = 1200,
+  images,
 }: {
   paragraphs: readonly string[];
   image?: string;
@@ -47,7 +49,14 @@ export function KadrajinOtesiReading({
   imageClass?: "wide" | "portrait" | "editorial";
   imageWidth?: number;
   imageHeight?: number;
+  images?: readonly KadrajinOtesiReadingImage[];
 }) {
+  const readingImages: readonly KadrajinOtesiReadingImage[] = images ?? (
+    image && imageAfterParagraph !== undefined
+      ? [{ src: image, afterParagraph: imageAfterParagraph, className: imageClass, width: imageWidth, height: imageHeight }]
+      : []
+  );
+
   return (
     <div className="beyond-reading">
       {paragraphs.map((block, i) => (
@@ -60,11 +69,11 @@ export function KadrajinOtesiReading({
               </span>
             ))}
           </p>
-          {image && imageAfterParagraph === i ? (
-            <figure className={`beyond-reading__image beyond-reading__image--${imageClass} reveal-up`}>
-              <Image src={image} alt="" width={imageWidth} height={imageHeight} sizes={imageClass === "portrait" ? "(max-width: 767px) 100vw, 42vw" : "(max-width: 767px) 100vw, 72vw"} />
+          {readingImages.filter(({ afterParagraph }) => afterParagraph === i).map((readingImage) => (
+            <figure key={readingImage.src} className={`beyond-reading__image beyond-reading__image--${readingImage.className} reveal-up`}>
+              <Image src={readingImage.src} alt="" width={readingImage.width} height={readingImage.height} sizes={readingImage.className === "portrait" ? "(max-width: 767px) 92vw, 42vw" : "(max-width: 767px) 100vw, 72vw"} />
             </figure>
-          ) : null}
+          ))}
         </div>
       ))}
     </div>

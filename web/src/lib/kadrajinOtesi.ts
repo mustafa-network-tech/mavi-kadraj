@@ -37,6 +37,15 @@ export type KadrajinOtesiPostMeta = {
   readingImageClass?: "wide" | "portrait" | "editorial";
   readingImageWidth?: number;
   readingImageHeight?: number;
+  readingImages?: readonly KadrajinOtesiReadingImage[];
+};
+
+export type KadrajinOtesiReadingImage = {
+  src: string;
+  afterParagraph: number;
+  className: "wide" | "portrait" | "editorial" | "secondary-left" | "secondary-right";
+  width: number;
+  height: number;
 };
 
 export const kadrajinOtesiPosts: readonly KadrajinOtesiPostMeta[] = [
@@ -50,6 +59,10 @@ export const kadrajinOtesiPosts: readonly KadrajinOtesiPostMeta[] = [
     seriesLabel: "Kadrajın ötesi",
     description: "Bazen deklanşöre basmamak ve bir anı yalnızca kendine saklamak üzerine.",
     ogImage: "/og/kadrajin-otesi/kendine-donebilen-insan.jpg",
+    readingImages: [
+      { src: "/yansimalar/gokceada/gokceada8.JPG", afterParagraph: 1, className: "wide", width: 6000, height: 4000 },
+      { src: "/yansimalar/rastgele-kadraj/rk5.jpg", afterParagraph: 4, className: "secondary-left", width: 1500, height: 1000 },
+    ],
   },
   {
     slug: "isigin-pesinden",
@@ -60,6 +73,10 @@ export const kadrajinOtesiPosts: readonly KadrajinOtesiPostMeta[] = [
     seriesLabel: "Kadrajın ötesi",
     description: "Işığı ararken yolun ve bekleyişin içinde bulunanlar üzerine.",
     ogImage: "/og/kadrajin-otesi/kendine-donebilen-insan.jpg",
+    readingImages: [
+      { src: "/yansimalar/gunbatımı/gb3.jpg", afterParagraph: 4, className: "wide", width: 1985, height: 1800 },
+      { src: "/yansimalar/gunbatımı/gb6.JPG", afterParagraph: 6, className: "secondary-right", width: 6000, height: 4000 },
+    ],
   },
   {
     slug: "yolun-bittigi-yerde",
@@ -70,6 +87,10 @@ export const kadrajinOtesiPosts: readonly KadrajinOtesiPostMeta[] = [
     seriesLabel: "Kadrajın ötesi",
     description: "Bir yolun sonuyla insanın içinde başlayan başka bir yol üzerine.",
     ogImage: "/og/kadrajin-otesi/kendine-donebilen-insan.jpg",
+    readingImages: [
+      { src: "/yansimalar/rastgele-kadraj/IMG_2928.JPG", afterParagraph: 1, className: "editorial", width: 6000, height: 4000 },
+      { src: "/yansimalar/bolu/bolu10.JPG", afterParagraph: 5, className: "secondary-right", width: 6000, height: 4000 },
+    ],
   },
   {
     slug: "kendine-donebilen-insan",
@@ -81,6 +102,10 @@ export const kadrajinOtesiPosts: readonly KadrajinOtesiPostMeta[] = [
     description:
       "Hayat, mutluluk ve içe dönüş — sessiz, sinematik bir okuma. Mavi Kadraj.",
     ogImage: "/og/kadrajin-otesi/kendine-donebilen-insan.jpg",
+    readingImages: [
+      { src: "/yansimalar/rastgele-kadraj/rk10.jpeg", afterParagraph: 6, className: "editorial", width: 1536, height: 1412 },
+      { src: "/yansimalar/gokceada/gokceada4.JPG", afterParagraph: 9, className: "secondary-left", width: 6000, height: 4000 },
+    ],
   },
 ];
 
