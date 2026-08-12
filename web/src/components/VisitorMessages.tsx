@@ -72,11 +72,10 @@ export function VisitorMessages() {
       {!loading && messages.length === 0 && !error && <p className="visitor-notes__empty">İlk cümle için burada sessiz bir yer var.</p>}
       {messages.map((item) => <article className={item.is_featured ? "visitor-note visitor-note--featured" : "visitor-note"} key={item.id}>
         <blockquote>“{item.message}”</blockquote>
-        <footer><div><strong>{item.name}</strong><time dateTime={item.approved_at ?? item.created_at}>{new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(item.approved_at ?? item.created_at))}</time></div>
+        <footer><div><strong>{item.editorial_icon && <span className="visitor-note__icon" aria-hidden>{item.editorial_icon}</span>}{item.name}</strong>{item.is_editorial ? <span className="visitor-note__label">{item.name === "MK Digital Systems" ? "BAŞLANGIÇ NOTU" : "EDİTORYAL NOT"}</span> : <time dateTime={item.approved_at ?? item.created_at}>{new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(item.approved_at ?? item.created_at))}</time>}</div>
           <div className="visitor-reactions" aria-label="Tepkiler">{REACTIONS.map((reaction) => <button type="button" key={reaction} className={item.selectedReaction === reaction ? "is-selected" : ""} aria-pressed={item.selectedReaction === reaction} onClick={() => void react(item.id, reaction)}><span aria-hidden>{REACTION_EMOJI[reaction]}</span><small>{item.reactions[reaction]}</small></button>)}</div>
         </footer>
       </article>)}
     </section>
   </>;
 }
-

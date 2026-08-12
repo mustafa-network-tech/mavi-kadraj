@@ -9,6 +9,8 @@ export type PublicMessage = {
   created_at: string;
   approved_at: string | null;
   is_featured: boolean;
+  is_editorial: boolean;
+  editorial_icon: string | null;
   reactions: Record<Reaction, number>;
   selectedReaction: Reaction | null;
 };

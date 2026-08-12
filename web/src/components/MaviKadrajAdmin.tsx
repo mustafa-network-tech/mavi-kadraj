@@ -6,7 +6,7 @@ import { createPublicSupabaseClient, isSupabaseConfigured } from "@/lib/supabase
 import { REACTIONS, REACTION_EMOJI, type Reaction } from "@/lib/messages";
 
 type Status = "pending" | "approved" | "rejected";
-type AdminMessage = { id: string; name: string; message: string; status: Status; created_at: string; approved_at: string | null; is_featured: boolean; mavi_kadraj_message_reactions: { reaction: Reaction }[] };
+type AdminMessage = { id: string; name: string; message: string; status: Status; created_at: string; approved_at: string | null; is_featured: boolean; is_editorial: boolean; editorial_icon: string | null; mavi_kadraj_message_reactions: { reaction: Reaction }[] };
 const TABS: { status: Status; label: string }[] = [{ status: "pending", label: "Bekleyenler" }, { status: "approved", label: "Yayınlananlar" }, { status: "rejected", label: "Reddedilenler" }];
 
 export function MaviKadrajAdmin() {
@@ -17,7 +17,7 @@ export function MaviKadrajAdmin() {
   const [error, setError] = useState("");
 
   const load = useCallback(async () => {
-    const { data, error: queryError } = await supabase.from("mavi_kadraj_messages").select("id,name,message,status,created_at,approved_at,is_featured,mavi_kadraj_message_reactions(reaction)").order("created_at", { ascending: false });
+    const { data, error: queryError } = await supabase.from("mavi_kadraj_messages").select("id,name,message,status,created_at,approved_at,is_featured,is_editorial,editorial_icon,mavi_kadraj_message_reactions(reaction)").order("created_at", { ascending: false });
     if (queryError) setError(queryError.message); else setMessages((data ?? []) as AdminMessage[]);
   }, [supabase]);
 
@@ -61,7 +61,7 @@ export function MaviKadrajAdmin() {
     <section>{visible.map((item) => {
       const counts = Object.fromEntries(REACTIONS.map((key) => [key, item.mavi_kadraj_message_reactions.filter((entry) => entry.reaction === key).length])) as Record<Reaction, number>;
       const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-      return <article key={item.id}><div className="mk-admin__meta"><strong>{item.name}</strong><time>{new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(item.created_at))}</time><span>{item.status}</span></div><blockquote>{item.message}</blockquote>
+      return <article key={item.id}><div className="mk-admin__meta"><strong>{item.editorial_icon && `${item.editorial_icon} `}{item.name}</strong>{item.is_editorial && <span className="mk-admin__editorial">Editorial</span>}<time>{new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(item.created_at))}</time><span>{item.status}</span></div><blockquote>{item.message}</blockquote>
         <div className="mk-admin__reactions"><b>Toplam tepki: {total}</b>{REACTIONS.map((reaction) => <span key={reaction}>{REACTION_EMOJI[reaction]} {counts[reaction]}</span>)}</div>
         <div className="mk-admin__actions">{item.status !== "approved" && <button onClick={() => void update(item.id, { status: "approved" })}>✓ Yayınla</button>}{item.status !== "rejected" && <button onClick={() => void update(item.id, { status: "rejected" })}>✕ Reddet</button>}{item.status === "approved" && <button onClick={() => void update(item.id, { status: "pending" })}>Yayından kaldır</button>}{item.status === "approved" && <button onClick={() => void update(item.id, { is_featured: !item.is_featured })}>{item.is_featured ? "Öne çıkarmayı kaldır" : "Öne çıkar"}</button>}<button onClick={() => void remove(item.id)}>Sil</button></div>
       </article>;

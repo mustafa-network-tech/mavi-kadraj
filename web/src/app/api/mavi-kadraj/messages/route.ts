@@ -12,8 +12,9 @@ export async function GET(request: NextRequest) {
     const supabase = createServerSupabaseClient();
     const { data, error } = await supabase
       .from("mavi_kadraj_messages")
-      .select("id,name,message,created_at,approved_at,is_featured,mavi_kadraj_message_reactions(reaction,visitor_id)")
+      .select("id,name,message,created_at,approved_at,is_featured,is_editorial,editorial_icon,mavi_kadraj_message_reactions(reaction,visitor_id)")
       .eq("status", "approved")
+      .order("is_editorial", { ascending: true })
       .order("is_featured", { ascending: false })
       .order("approved_at", { ascending: false });
     if (error) throw error;
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
         if (REACTIONS.includes(reaction)) reactions[reaction] += 1;
         if (item.visitor_id === visitorHash) selectedReaction = reaction;
       }
-      return { id: row.id, name: row.name, message: row.message, created_at: row.created_at, approved_at: row.approved_at, is_featured: row.is_featured, reactions, selectedReaction };
+      return { id: row.id, name: row.name, message: row.message, created_at: row.created_at, approved_at: row.approved_at, is_featured: row.is_featured, is_editorial: row.is_editorial, editorial_icon: row.editorial_icon, reactions, selectedReaction };
     });
     const response = NextResponse.json({ messages });
     setVisitorCookie(response, visitor);
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
     if (limit && Date.now() - new Date(limit.last_submitted_at).getTime() < 60_000) {
       return NextResponse.json({ error: "Bir sonraki cümle için biraz bekleyin." }, { status: 429 });
     }
-    const { error } = await supabase.from("mavi_kadraj_messages").insert({ name, message, status: "pending", is_featured: false });
+    const { error } = await supabase.from("mavi_kadraj_messages").insert({ name, message, status: "pending", is_featured: false, is_editorial: false, editorial_icon: null });
     if (error) throw error;
     await supabase.from("mavi_kadraj_submission_limits").upsert({ visitor_id: rateHash, last_submitted_at: new Date().toISOString() });
     const response = NextResponse.json({ ok: true }, { status: 201 });
@@ -62,4 +63,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Cümlen şu anda gönderilemedi. Lütfen yeniden dene." }, { status: 503 });
   }
 }
-
