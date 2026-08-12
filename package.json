@@ -9,8 +9,5 @@
     "build": "npm run build -w mavikadraj-web",
     "start": "npm run start -w mavikadraj-web",
     "lint": "npm run lint -w mavikadraj-web"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.112.3"
   }
 }
