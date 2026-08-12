@@ -33,6 +33,9 @@ export function SiteHeader() {
           <Link href="/kadrajin-otesi" className="hover:text-[var(--mk-accent)]">
             Kadrajın Ötesinde
           </Link>
+          <Link href="/sizden-gelenler" className="hover:text-[var(--mk-accent)]">
+            Sizden Gelenler
+          </Link>
           <Link href="/mavi-kadraj-kimdir" className="hover:text-[var(--mk-accent)]">
             Mavi Kadraj Kimdir
           </Link>
