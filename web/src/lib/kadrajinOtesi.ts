@@ -1,3 +1,5 @@
+import { newKadrajinOtesiBodies, newKadrajinOtesiPosts } from "@/lib/kadrajinOtesiYeni";
+
 /**
  * Kadrajın Ötesi — yazı arşivi (seri + tarih + OG görsel yolu).
  * Yeni yazı: bu dosyaya kayıt + gövdeyi kadrajinOtesiBodies içine ekleyin.
@@ -30,9 +32,15 @@ export type KadrajinOtesiPostMeta = {
    * Örn: /og/kadrajin-otesi/kendine-donebilen-insan.jpg
    */
   ogImage: string;
+  readingImage?: string;
+  readingImageAfterParagraph?: number;
+  readingImageClass?: "wide" | "portrait" | "editorial";
+  readingImageWidth?: number;
+  readingImageHeight?: number;
 };
 
 export const kadrajinOtesiPosts: readonly KadrajinOtesiPostMeta[] = [
+  ...newKadrajinOtesiPosts,
   {
     slug: "fotografini-cekmedigim-anlar",
     title: "Fotoğrafını Çekmediğim Anlar",
@@ -123,6 +131,7 @@ const cekmedigimAnlarParagraphs = [
 ] as const;
 
 export const kadrajinOtesiBodies: Record<string, readonly string[]> = {
+  ...newKadrajinOtesiBodies,
   "kendine-donebilen-insan": kendineDonebilenInsanParagraphs,
   "yolun-bittigi-yerde": yolunBittigiYerdeParagraphs,
   "isigin-pesinden": isiginPesindenParagraphs,

@@ -229,8 +229,15 @@ body {
 .beyond-article article header > span { font-size:10px; letter-spacing:.15em; text-transform:uppercase; }
 .beyond-article article h1 { margin:20px 0 30px; font:400 clamp(54px,8vw,105px)/.9 var(--font-cormorant),serif; letter-spacing:-.04em; }
 .beyond-article article header p { max-width:500px; color:#6c6e68; font:italic 400 20px/1.5 var(--font-cormorant),serif; }
-.beyond-reading { display:flex; flex-direction:column; gap:clamp(38px,5vw,64px); }
-.beyond-reading > p { color:#383a36; font:400 clamp(18px,1.45vw,22px)/1.9 var(--font-cormorant),serif; }
+.beyond-reading { display:flex; flex-direction:column; gap:clamp(30px,4vw,52px); }
+.beyond-reading__block > p { color:#383a36; font:400 clamp(18px,1.45vw,22px)/1.9 var(--font-cormorant),serif; }
+.beyond-reading__image { width:min(1080px,calc(100vw - 48px)); margin:clamp(70px,9vw,130px) 0 clamp(45px,7vw,95px) 50%; transform:translateX(-50%); }
+.beyond-reading__image img { display:block; width:100%; height:auto; }
+.beyond-reading__image--portrait { width:min(65%,520px); margin-left:2%; transform:none; }
+.beyond-reading__image--editorial { width:min(900px,calc(100vw - 48px)); }
+.essay-signature { margin-top:clamp(80px,10vw,130px); }
+.essay-signature p { color:#383a36; font:400 clamp(22px,2vw,28px)/1.2 var(--font-cormorant),serif; }
+.essay-signature span { display:block; margin-top:12px; color:#6c6e68; font:400 9px/1 var(--font-outfit),sans-serif; letter-spacing:.28em; }
 .beyond-article__end { min-height:60svh; display:grid; place-content:center; text-align:center; background:#dcd9d1; }
 .beyond-article__end span { margin-bottom:25px; }
 .beyond-article__end p { font:400 clamp(32px,4.5vw,66px)/1.1 var(--font-cormorant),serif; }
@@ -244,6 +251,10 @@ body {
 @keyframes v2-reveal-clip { from { opacity:.5; clip-path:inset(12% 0 12% 0); } to { opacity:1; clip-path:inset(0); } }
 
 @media (max-width: 767px) {
+  .beyond-reading__image,
+  .beyond-reading__image--portrait,
+  .beyond-reading__image--editorial { width:100%; margin-left:0; margin-right:0; transform:none; }
+  .essay-signature { margin-top:72px; }
   .exhibition-header { min-height:64px; padding:0 20px; }
   .exhibition-nav { display:none; }
   .exhibition-header > :last-child { display:block; }
