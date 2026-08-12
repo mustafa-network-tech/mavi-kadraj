@@ -26,13 +26,17 @@ export default function MaviKadrajKimdirPage() {
       <ExhibitionHeader />
 
       <header className="about-hero">
-        <p>MAVİ KADRAJ KİMDİR?</p>
-        <h1>Bazı insanlar fotoğraf çeker.<br /><em>Bazıları önce hisseder.</em></h1>
-        <blockquote>Mavi Kadraj, Mustafa Öner&apos;in dünyaya biraz daha yavaş bakma biçimi.</blockquote>
+        <Image className="about-hero__image" src="/yansimalar/gokceada/gokceada2.JPG" alt="Deniz ve gökyüzü önünde insan silüeti" fill priority sizes="100vw" />
+        <div className="about-hero__overlay" aria-hidden />
+        <div className="about-hero__copy">
+          <p>MAVİ KADRAJ KİMDİR?</p>
+          <h1>Bazı insanlar fotoğraf çeker.<br /><em>Bazıları önce hisseder.</em></h1>
+          <blockquote>Mavi Kadraj, Mustafa Öner&apos;in dünyaya biraz daha yavaş bakma biçimi.</blockquote>
+        </div>
       </header>
 
       <div className="about-sections">
-        <AboutSection label="01 — BİR İSİMDEN ÖNCE BİR BAKIŞ" title="Mavi Kadraj bir fotoğraf sayfası olarak başlamadı.">
+        <AboutSection label="BİR İSİMDEN ÖNCE BİR BAKIŞ" title="Mavi Kadraj bir fotoğraf sayfası olarak başlamadı.">
           <p>Mavi Kadraj&apos;ın tam olarak ne zaman başladığını söylemek zor.</p>
           <p>Belki ilk fotoğraf makinesini elime aldığım gün değildi. Belki sosyal medyada ilk kareyi paylaştığım gün de değildi.</p>
           <p>Sanırım çok daha önce başladı.</p>
@@ -45,7 +49,7 @@ export default function MaviKadrajKimdirPage() {
           <p>Bakış daha önce vardı.</p>
         </AboutSection>
 
-        <AboutSection label="02 — OSMANİYE" title={<>Bazı yerlerden ayrılırsın.<br />Bazı yerler senden ayrılmaz.</>} className="about-section--osmaniye">
+        <AboutSection label="OSMANİYE" title={<>Bazı yerlerden ayrılırsın.<br />Bazı yerler senden ayrılmaz.</>} className="about-section--osmaniye">
           <p>Osmaniye benim için yalnızca haritada başlayan bir hikâye değil.</p>
           <p>Çocukluğun bildiği sıcaklık, dağların uzaktan görünüşü, toprağın rengi ve insanın yıllar sonra bile tanıdığı o memleket hissi…</p>
           <p>İnsan büyüdükçe başka şehirlere gidiyor.</p>
@@ -58,7 +62,7 @@ export default function MaviKadrajKimdirPage() {
           <p>Ama bakışın içinde kalır.</p>
         </AboutSection>
 
-        <AboutSection label="03 — BOLU" title="Sonra yeşilin başka bir dilini öğrendim." className="about-section--with-image">
+        <AboutSection label="BOLU" title="Sonra yeşilin başka bir dilini öğrendim." className="about-section--with-image">
           <p>Bolu bana doğanın yalnızca seyredilecek bir şey olmadığını yeniden hatırlattı.</p>
           <p>Ormanların içinde yürüdükçe insanın sesi azalıyor.</p>
           <p>Şehir geride kalıyor.</p>
@@ -75,7 +79,7 @@ export default function MaviKadrajKimdirPage() {
           <p>Bazen insanın zihnini susturan bir boşluk.</p>
         </AboutSection>
 
-        <AboutSection label="04 — ÇANAKKALE" title="Denizin karşısında insan biraz daha az konuşuyor." className="about-section--with-image">
+        <AboutSection label="ÇANAKKALE" title="Denizin karşısında insan biraz daha az konuşuyor." className="about-section--with-image">
           <p>Çanakkale başka bir ışık öğretti bana.</p>
           <p>Denizin üzerinde değişen gökyüzünü, rüzgârın bir manzarayı birkaç dakika içinde başka bir şeye dönüştürebildiğini ve aynı kıyının hiçbir akşam gerçekten aynı olmadığını…</p>
           <p>Bazen gün batımını çekmek için çıktım.</p>
@@ -93,7 +97,7 @@ export default function MaviKadrajKimdirPage() {
           <p>— Mustafa Öner</p>
         </aside>
 
-        <AboutSection label="05 — NEDEN FOTOĞRAF?" title={<>Çünkü bazı şeyleri anlatmak istemiyorum.<br />Göstermek de istemiyorum.<br />Yalnızca kaybolmasınlar istiyorum.</>} className="about-section--with-image">
+        <AboutSection label="NEDEN FOTOĞRAF?" title={<>Çünkü bazı şeyleri anlatmak istemiyorum.<br />Göstermek de istemiyorum.<br />Yalnızca kaybolmasınlar istiyorum.</>} className="about-section--with-image">
           <p>Fotoğraf benim için hiçbir zaman kusursuz karelerin peşinden koşmak olmadı.</p>
           <p>Bazen teknik olarak eksik bir fotoğraf, kusursuz bir fotoğraftan daha fazla şey anlatabilir.</p>
           <p>Bir bakış.</p><p>Boş bir sandalye.</p><p>Yağmurdan sonra kalan bir sokak.</p><p>Denizin kenarında tek başına duran biri.</p><p>Bir kedi.</p><p>Eski bir ev.</p><p>Günün son birkaç dakikası…</p>
@@ -104,7 +108,7 @@ export default function MaviKadrajKimdirPage() {
           <p>Mavi Kadraj biraz da onları kaybetmemek için var.</p>
         </AboutSection>
 
-        <AboutSection label="06 — KADRAJIN DIŞINDA" title="Her fotoğrafın dışında kalan başka bir hikâye vardır.">
+        <AboutSection label="KADRAJIN DIŞINDA" title="Her fotoğrafın dışında kalan başka bir hikâye vardır.">
           <p>Bir fotoğraf çektiğimizde dünyadan küçücük bir parçayı seçiyoruz.</p>
           <p>Kadrajın içine aldığımız kadar dışarıda bıraktığımız şeyler de var.</p>
           <p>Belki bu yüzden zamanla yalnızca fotoğraf paylaşmak yetmedi.</p>

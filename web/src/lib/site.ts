@@ -1,7 +1,7 @@
 /** Site genel ayarları. */
 export const site = {
   name: "Mavi Kadraj",
-  url: "https://www.mavikadraj.com.tr",
+  url: "https://mavikadraj.com.tr",
   description: "Sessiz kareler, iz bırakan sessizlik.",
 } as const;
 

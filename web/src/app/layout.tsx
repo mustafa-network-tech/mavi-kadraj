@@ -3,9 +3,9 @@ import { Cormorant_Garamond, Outfit, Playfair_Display, Inter } from "next/font/g
 import "./globals.css";
 import { site } from "@/lib/site";
 
-/** Genel site OG — public/og/mavi-kadraj-og.jpg */
+/** Genel site OG — public/images/mavi-kadraj-og.jpg */
 const DEFAULT_OG = {
-  url: "/og/mavi-kadraj-og.jpg",
+  url: "/images/mavi-kadraj-og.jpg",
   width: 1200,
   height: 630,
   alt: "Mavi Kadraj",
@@ -44,17 +44,28 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  applicationName: site.name,
   title: {
-    default: `${site.name} — sessiz kareler`,
+    default: site.name,
     template: `%s — ${site.name}`,
   },
   description: site.description,
   metadataBase: new URL(site.url),
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+  },
   openGraph: {
     title: site.name,
     description: site.description,
     locale: "tr_TR",
     type: "website",
+    url: site.url,
+    siteName: site.name,
     images: [DEFAULT_OG],
   },
   twitter: {
