@@ -1,6 +1,9 @@
 import { KADRAJIN_OTESI_HIGHLIGHT_PHRASES } from "@/lib/kadrajinOtesi";
 import type { KadrajinOtesiReadingImage } from "@/lib/kadrajinOtesi";
 import Image from "next/image";
+import { collections } from "@/lib/collections";
+
+const photoAlt = new Map(collections.flatMap((collection) => collection.images.map((photo) => [photo.src, photo.alt] as const)));
 
 function highlightPhrases(
   text: string,
@@ -71,7 +74,7 @@ export function KadrajinOtesiReading({
           </p>
           {readingImages.filter(({ afterParagraph }) => afterParagraph === i).map((readingImage) => (
             <figure key={readingImage.src} className={`beyond-reading__image beyond-reading__image--${readingImage.className} reveal-up`}>
-              <Image src={readingImage.src} alt="" width={readingImage.width} height={readingImage.height} sizes={readingImage.className === "portrait" ? "(max-width: 767px) 92vw, 42vw" : "(max-width: 767px) 100vw, 72vw"} />
+              <Image src={readingImage.src} alt={photoAlt.get(readingImage.src) ?? ""} width={readingImage.width} height={readingImage.height} sizes={readingImage.className === "portrait" ? "(max-width: 767px) 92vw, 42vw" : "(max-width: 767px) 100vw, 72vw"} />
             </figure>
           ))}
         </div>

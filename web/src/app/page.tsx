@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { site } from "@/lib/site";
+import { PageStructuredData } from "@/components/PageStructuredData";
 import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,13 +10,14 @@ import { ExhibitionFooter } from "@/components/ExhibitionFooter";
 import { CinematicPhotoScene } from "@/components/CinematicPhotoScene";
 import { collections } from "@/lib/collections";
 
-export const metadata: Metadata = { title: "Fotoğrafın İçinden Geçen Anlar" };
+export const metadata = pageMetadata("/", "Mavi Kadraj | Doğa, Manzara ve Fotoğraf Hikâyeleri", site.description);
 
 const selected = [collections[0].images[7],collections[5].images[2],collections[6].images[3],collections[3].images[6],collections[1].images[4],collections[4].images[2],collections[2].images[1],collections[7].images[6],collections[3].images[3],collections[0].images[10]];
 
 export default function HomePage() {
   return (
     <main className="exhibition-page">
+      <PageStructuredData path="/" name="Mavi Kadraj" description={site.description} />
       <section className="home-hero" aria-labelledby="home-title">
         <Image src="/images/hero.jpeg" alt="Gün batımında doğadaki küçük bir ayrıntıyı fotoğraflayan Mavi Kadraj" fill priority sizes="100vw" className="home-hero__image" />
         <div className="home-hero__shade" />

@@ -1,12 +1,11 @@
 import Image from "next/image";
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/PageStructuredData";
 import { ExhibitionHeader } from "@/components/ExhibitionHeader";
 import { ExhibitionFooter } from "@/components/ExhibitionFooter";
 
-export const metadata: Metadata = {
-  title: "Mavi Kadraj Kimdir?",
-  description: "Mustafa Öner'in dünyaya biraz daha yavaş bakma biçimi: Mavi Kadraj.",
-};
+const description = "Mustafa Öner’in dünyaya biraz daha yavaş bakma biçimi Mavi Kadraj’ı; fotoğrafa, yollara ve gündelik anlara yaklaşımını tanıyın.";
+export const metadata = pageMetadata("/mavi-kadraj-kimdir", "Mavi Kadraj Kimdir?", description);
 
 function AboutSection({ label, title, children, className = "" }: { label: string; title: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
@@ -23,6 +22,7 @@ function AboutSection({ label, title, children, className = "" }: { label: strin
 export default function MaviKadrajKimdirPage() {
   return (
     <main className="exhibition-page about-page">
+      <PageStructuredData path="/mavi-kadraj-kimdir" name="Mavi Kadraj Kimdir?" description={description} />
       <ExhibitionHeader />
 
       <header className="about-hero">

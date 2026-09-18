@@ -1,8 +1,8 @@
 /** Site genel ayarları. */
 export const site = {
   name: "Mavi Kadraj",
-  url: "https://mavikadraj.com.tr",
-  description: "Sessiz kareler, iz bırakan sessizlik.",
+  url: "https://www.mavikadraj.com.tr",
+  description: "Mavi Kadraj’ın doğa, manzara ve şehir fotoğraflarını keşfedin; seçilmiş karelerin ve yolculukların ardından kalan fotoğraf hikâyelerini okuyun.",
 } as const;
 
 /** Eski ortak ana sayfa katmanları tarafından da kullanılan marka metni. */

@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/PageStructuredData";
 import { Fragment } from "react";
 import { CollectionPortal } from "@/components/CollectionPortal";
 import { ExhibitionHeader } from "@/components/ExhibitionHeader";
 import { ExhibitionFooter } from "@/components/ExhibitionFooter";
 import { collections } from "@/lib/collections";
 
-export const metadata: Metadata = { title: "Kadraj Yansımaları", description: "Biriktirdiğim yerler, ışıklar ve sessiz anlar." };
+const description = "Mavi Kadraj’ın Gökçeada, Bozcaada, Tirilye, Bolu ve diğer koleksiyonlarında biriken yerleri, ışıkları ve sessiz anları fotoğraflarla keşfedin.";
+export const metadata = pageMetadata("/kadraj-yansimalari", "Kadraj Yansımaları", description);
 
 export default function KadrajYansimalariPage() {
   return (
     <main className="exhibition-page reflections-page">
+      <PageStructuredData path="/kadraj-yansimalari" name="Kadraj Yansımaları" description={description} collection />
       <ExhibitionHeader />
       <header className="reflections-intro">
         <h1>Kadraj<br /><em>Yansımaları</em></h1>
