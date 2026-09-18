@@ -10,6 +10,7 @@ const Z_PANEL = 50100;
 const NAV_ITEMS = [
   { href: "/kadraj-yansimalari", label: "Kadraj yansımaları" },
   { href: "/kadrajin-otesi", label: "Kadrajın Ötesinde" },
+  { href: "https://arsiv.mavikadraj.com.tr/", label: "Arşiv" },
   { href: "/sizden-gelenler", label: "Sizden Gelenler" },
   { href: "/mavi-kadraj-kimdir", label: "Mavi Kadraj Kimdir" },
 ] as const;

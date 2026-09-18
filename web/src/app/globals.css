@@ -19,10 +19,16 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none;
   /* Mobilde 100vw / taşan katmanlardan yatay kaydırma (sayfa “kayması”) azaltılır */
   overflow-x: clip;
   /* 100vh mobilde adres çubuğu ile “hayalet” boşluk; dvh gerçek görünür alan */
   min-height: 100dvh;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -42,7 +48,7 @@ body {
 .exhibition-header { position:relative; z-index:50; display:flex; align-items:center; justify-content:space-between; min-height:76px; padding:0 clamp(20px,4vw,64px); color:var(--ink); border-bottom:1px solid rgba(23,24,23,.12); font-family:var(--font-outfit),sans-serif; }
 .exhibition-header--overlay { position:absolute; inset:0 0 auto; color:white; border-color:rgba(255,255,255,.2); }
 .exhibition-brand { font:500 clamp(13px,1.1vw,16px)/1 var(--font-outfit),sans-serif; letter-spacing:.22em; }
-.exhibition-nav { display:flex; gap:clamp(20px,3vw,44px); font-size:12px; letter-spacing:.08em; }
+.exhibition-nav { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:clamp(20px,3vw,44px); font-size:12px; letter-spacing:.08em; }
 .exhibition-header > :last-child { display:none; }
 .exhibition-kicker { font:400 10px/1.4 var(--font-outfit),sans-serif; text-transform:uppercase; letter-spacing:.24em; }
 
@@ -135,6 +141,7 @@ body {
 .home-collections__flow .portal-5 .collection-portal__image { aspect-ratio:4/5; }
 .home-collections__flow .portal-6 { grid-column:7/13; margin-top:180px; }
 .exhibition-more { display:block; width:max-content; margin:150px auto 0; padding-bottom:8px; border-bottom:1px solid; font:400 10px/1 var(--font-outfit),sans-serif; letter-spacing:.2em; text-transform:uppercase; }
+.selected-frames__archive { grid-column:1/-1; max-width:100%; margin-top:0; line-height:1.5; text-align:center; }
 .home-collections__flow .portal-3 { grid-column:7/13; margin-top:100px; }
 .home-closing { position:relative; display:grid; grid-template-columns:1.25fr .75fr; align-items:center; min-height:78svh; background:#d9d7d0; }
 .home-closing figure { position:relative; height:78svh; }
@@ -202,7 +209,7 @@ body {
 .v2-footer__social small { color:#9ba3a1; font-size:10px; font-weight:300; letter-spacing:.06em; }
 .v2-footer__social strong { display:block; font:400 27px/1.25 var(--font-cormorant),serif; }
 .v2-footer__social span { font-size:9px; letter-spacing:.14em; text-transform:uppercase; }
-.v2-footer nav { display:flex; align-items:end; gap:30px; font-size:9px; letter-spacing:.13em; text-transform:uppercase; }
+.v2-footer nav { display:flex; flex-wrap:wrap; align-items:end; gap:30px; font-size:9px; letter-spacing:.13em; text-transform:uppercase; }
 .v2-footer__legal { align-self:end; justify-self:end; color:#8f9694; font-size:9px; letter-spacing:.14em; text-transform:uppercase; }
 .collection-pause { grid-column:2/12; min-height:32svh; display:flex; align-items:center; justify-content:center; gap:38px; text-align:center; }
 .collection-pause span { font-size:22px; }
