@@ -39,7 +39,7 @@ export default function HomePage() {
           {i === 8 && <aside className="selected-note selected-note--city"><span aria-hidden>🕊️</span><p>Gökyüzüne bakınca<br /><em>mesafeler biraz küçülür.</em></p><small>Bir şehir bazen<br />tek bir kareye sığmaz.</small></aside>}
           {i === 9 && <aside className="selected-note selected-note--flag"><p>Rüzgâr geçer.<br /><em>İz kalır.</em></p></aside>}
         </Fragment>)}
-        <a href="https://arsiv.mavikadraj.com.tr/" className="exhibition-more selected-frames__archive">Tüm Fotoğraf Arşivini Keşfet <span aria-hidden>→</span></a>
+        <a href="https://arsiv.mavikadraj.com.tr/" className="exhibition-more selected-frames__archive">Tüm arşivi keşfet <span aria-hidden>→</span></a>
       </section>
 
       <CinematicPhotoScene wide={collections[7].images[8]} portrait={collections[4].images[1]} />

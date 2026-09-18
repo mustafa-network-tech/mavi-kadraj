@@ -36,9 +36,6 @@ export function SiteHeader() {
           <a href="https://arsiv.mavikadraj.com.tr/" className="hover:text-[var(--mk-accent)]">
             Arşiv
           </a>
-          <Link href="/sizden-gelenler" className="hover:text-[var(--mk-accent)]">
-            Sizden Gelenler
-          </Link>
           <Link href="/mavi-kadraj-kimdir" className="hover:text-[var(--mk-accent)]">
             Mavi Kadraj Kimdir
           </Link>
