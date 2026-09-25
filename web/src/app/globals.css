@@ -151,6 +151,13 @@ body {
 .home-closing em { color:#687f8b; }
 .exhibition-footer { margin-top:120px; background:#171b1d; color:white; }
 
+.map-embed-intro { padding:clamp(48px,7vw,110px) clamp(20px,5vw,80px) clamp(28px,4vw,56px); }
+.map-embed-intro h1 { margin:22px 0 20px; font:400 clamp(48px,7vw,110px)/.9 var(--font-cormorant),serif; letter-spacing:-.045em; }
+.map-embed-intro h1 em { color:#657c88; }
+.map-embed-intro > p:last-child { max-width:560px; font:400 clamp(17px,1.6vw,22px)/1.45 var(--font-cormorant),serif; }
+.map-embed-frame { display:block; width:100%; height:calc(100svh - 76px); min-height:560px; border:0; border-block:1px solid rgba(23,24,23,.12); background:#e5ebe7; }
+.map-embed-fallback { padding:14px clamp(20px,5vw,80px) 0; font-size:12px; letter-spacing:.08em; }
+
 .reflections-intro { padding:clamp(100px,12vw,180px) clamp(24px,9vw,150px) clamp(120px,15vw,220px); }
 .reflections-intro h1 { margin:30px 0 40px; font:400 clamp(70px,12vw,190px)/.69 var(--font-cormorant),serif; letter-spacing:-.06em; }
 .reflections-intro h1 em { margin-left:8vw; color:#657c88; }
